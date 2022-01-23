@@ -80,3 +80,11 @@ img.wooden-frame:hover {
 .no-text-decoration{
 	text-decoration: none!important;
 }
+
+.no-artwork-section{
+	height: 400px;
+}
+
+.no-artwork-section h4{
+	padding: 200px 0px;
+}

@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load custom_filter %}
+{% load currency_filter %}
 
 {% block content %}
 <div class="container-fluid mt-3">
@@ -80,6 +82,7 @@
 
         <!-- all products -->
         <div id='products' class="col-lg-10 mx-auto">
+            {% if products_list.count > 0 %}
             <div class="row mx-auto">
                 {% for product in products_list %}
                 <div class="card mx-auto mb-3" id="" style="width: 15rem;height: 100%;">
@@ -94,7 +97,7 @@
                             <h5 class="card-title">{{product.name}}</h5>
                         </a>
                         <small class="card-blockquote">{{product.description|safe|truncatewords:"20"}}</small>
-                        <p class="card-text"><b>{{product.price}}</b></p>
+                        <p class="card-text"><b>{{product.price|floatword_indian|currency}}</b></p>
                     </div>
 
                     <div class="card-footer p-0 no-gutters">
@@ -138,6 +141,13 @@
                     </nav>
                 </div>
             </div>
+            {% else %}
+            <div class="row bg-white text-center no-artwork-section">
+                <div class="col-12">
+                    <h4>No Artwork Available</h4>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -6,5 +6,7 @@ setTimeout(function(){
 
 
 function divPic(image) {
-    document.getElementById('product_profile_img').innerHTML = "<img src= '"+image+"' class='w-100 border mt-2'>";
+   document.getElementById('product_profile_img').innerHTML = "<img src= '"+image+"' class='w-100 border mt-2'>";
 }
+
+
