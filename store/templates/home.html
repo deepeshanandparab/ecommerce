@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid mt-3">
+    <div class="row mx-3">
+        <div class="col-12 py-2">
+            <form>
+                <div class="form-group row float-right">
+                    <div class="col-xs-12">
+                        <input type="text" class="form-control search-textbox">
+                    </div>
+                    <div class="col-xs-2 mr-1">
+                        <button class="btn btn-dark wooden-button search-button" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mx-0">
+        <!-- filter -->
+
+        <div class="col-lg-2 mx-auto">
+            <div class="list-group">
+
+                <label>Paintings</label>
+                <div class="dropdown mb-3">
+                    <button class="wooden-button btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="painting"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select paintings
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="painting">
+                        <a class="dropdown-item" href="#">Sketches</a>
+                        <a class="dropdown-item" href="#">Canvas Paintings</a>
+                        <a class="dropdown-item" href="#">Abstract</a>
+                    </div>
+                </div>
+
+                <label>Antiques</label>
+                <div class="dropdown mb-3">
+                    <button class="wooden-button btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="antique"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select antiques
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="antique">
+                        <a class="dropdown-item" href="#">Coins</a>
+                        <a class="dropdown-item" href="#">Canvas Paintings</a>
+                        <a class="dropdown-item" href="#">Abstract</a>
+                    </div>
+                </div>
+
+                <label>Paper Craft</label>
+                <div class="dropdown mb-3">
+                    <button class="wooden-button btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="craft"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select carft
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="craft">
+                        <a class="dropdown-item" href="#">Craft</a>
+                    </div>
+                </div>
+
+                <label>Furniture</label>
+                <div class="dropdown mb-3">
+                    <button class="wooden-button btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="furniture"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select furniture
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="furniture">
+                        <a class="dropdown-item" href="#">Tables</a>
+                        <a class="dropdown-item" href="#">Chairs</a>
+                        <a class="dropdown-item" href="#">Chandelier</a>
+                        <a class="dropdown-item" href="#">Closet</a>
+                    </div>
+                </div>
+
+                <button class="btn btn-dark btn-sm my-2">Clear</button>
+            </div>
+        </div>
+
+        <!-- all products -->
+        <div id='products' class="col-lg-10 mx-auto">
+            <div class="row mx-auto">
+                {% for product in products_list %}
+                <div class="card mx-auto mb-3" id="" style="width: 15rem;height: 100%;">
+                    <a href="{% url 'productpage' product.id %}">
+                    <img class="card-img-top wooden-frame cursor-pointer" height="100%"
+                        src="https://www.vangoghgallery.com/img/starry_night_full.jpg"
+                        alt="Card image cap">
+                    </a>
+                    
+                    <div class="card-body">
+                        <a class="no-text-decoration text-dark" href="{% url 'productpage' product.id %}">
+                            <h5 class="card-title">{{product.name}}</h5>
+                        </a>
+                        <small class="card-blockquote">{{product.description|safe|truncatewords:"20"}}</small>
+                        <p class="card-text"><b>{{product.price}}</b></p>
+                    </div>
+
+                    <div class="card-footer p-0 no-gutters">
+                        <a href="{% url 'productpage' product.id %}"
+                        class="float-right btn btn-light form-control">View</a>
+                    </div>
+                </div> 
+                {% endfor %}
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="Page navigation example" class="float-right">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="first">
+                                    <i class="fa fa-angle-double-left text-dark"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <i class="fa fa-angle-left text-dark"></i>
+                                </a>
+                            </li>
+
+                            <li class="page-item"><a class="page-link text-dark" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link text-dark" href="#">3</a></li>
+
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="next">
+                                    <i class="fa fa-angle-right text-dark"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="last">
+                                    <i class="fa fa-angle-double-right text-dark"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

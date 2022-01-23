@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row message-row mx-auto">
+    <div class="col-md-12 text-center no-padding-left-lg no-padding-right-lg">
+          {% for message in messages %}
+              <div class="text-center alert alert-{% if message.level == 40 %}danger{% else %}{{message.tags}}{% endif %}" role="alert" id="message-container">
+                {{ message }}
+              </div>
+          {% endfor %}
+     </div>
+</div>
+
+<div class="row">
+    <div class="col-4 mx-auto border mt-4 rounded-top rounded-bottom box-shadow bg-white">
+        <div class="row mb-4">
+            <div class="col-12 p-0">
+                <img class="rounded-top" src="https://cdn.mos.cms.futurecdn.net/jbCNvTM4gwr2qV8X8fW3ZB-1024-80.png.webp"
+                    width="100%" height="100px">
+            </div>
+        </div>
+        <div class="row px-4 my-4">
+            <div class="col-6">
+                <h3>Sign Up</h3>
+            </div>
+            <div class="col-6">
+                <i class="fab fa-facebook fa-2x float-right text-primary"></i>
+                <i class="fab fa-google-plus fa-2x float-right mr-2 text-danger"></i>
+            </div>
+        </div>
+        <div class="row px-4 mt-4">
+            <div class="col-12">
+                <form class="form" method="POST" action="{% url 'signuppage' %}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="First Name" name="first_name"
+                                id="id_first_name" value="{% if value.first_name is not None %}{{ value.first_name }}{% endif %}">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="Last Name" name="last_name"
+                                id="id_last_name" value="{% if value.last_name is not None %}{{ value.last_name }}{% endif %}">
+                        </div>
+                    </div>
+                    <input type="text" class="form-control mt-2" placeholder="Username" name="username" value="{% if value.username is not None %}{{ value.username }}{% endif %}">
+                    <small class="float-right">15 characters or fewer. No special characters are allowed.</p></small>
+                    <input type="text" class="form-control my-2" placeholder="Email" name="email" id="id_last_name" value="{% if value.email is not None %}{{ value.email }}{% endif %}">
+                    <input type="password" class="form-control my-2" placeholder="Password" name="password1"
+                        id="id_password1">
+                    <input type="password" class="form-control my-2" placeholder="Confirm Password" name="password2"
+                        id="id_password2">
+                    <input type="checkbox" class="mr-2">Become a Seller
+                    <!-- {{ form|crispy }} -->
+                    <input type="submit" class="form-control btn btn-success my-2" value="Sign Up">
+                </form>
+            </div>
+        </div>
+        <div class="row px-4 mb-2">
+            <div class="col-12 text-center">
+                Already a Member? <a href="{% url 'loginpage'%}">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

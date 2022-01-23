@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row message-row mx-auto">
+    <div class="col-md-12 text-center no-padding-left-lg no-padding-right-lg">
+          {% for message in messages %}
+              <div class="text-center alert alert-{% if message.level == 40 %}danger{% else %}{{message.tags}}{% endif %}" role="alert" id="message-container">
+                {{ message }}
+              </div>
+          {% endfor %}
+     </div>
+</div>
+
+<div class="row">
+    <div class="col-4 mx-auto border mt-4 rounded-top rounded-bottom box-shadow bg-white">
+        <div class="row mb-4">
+            <div class="col-12 p-0">
+                <img class="rounded-top" src="https://images.unsplash.com/photo-1564399580075-5dfe19c205f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8YXJ0JTIwZ2FsbGVyeXxlbnwwfHwwfHw%3D&w=1000&q=80" width="100%"
+                    height="100px">
+            </div>
+        </div>
+        <div class="row px-4 my-4">
+            <div class="col-6">
+                <h3>Login</h3>
+            </div>
+            <div class="col-6">
+                <i class="fab fa-facebook fa-2x float-right text-primary"></i>
+                <i class="fab fa-google-plus fa-2x float-right mr-2 text-danger"></i>
+            </div>
+        </div>
+        <div class="row px-4 my-4">
+            <div class="col-12">
+            <form method="POST" action="{% url 'loginpage' %}">
+                {% csrf_token %}
+                <input type="text" class="form-control my-2" placeholder="Username" name="username">
+                <input type="password" class="form-control my-2" placeholder="Password" name="password">
+                <input type="submit" class="form-control btn btn-success my-2" value="Login">
+            </form>
+            </div>
+        </div>
+        <div class="row px-4 my-4">
+            <div class="col-6">
+                <input type="checkbox" class="mr-2">Remember Me
+            </div>
+            <div class="col-6">
+                <a href="{% url 'password_reset' %}" class="float-right">Forgot Password</a>
+            </div>
+        </div>
+        <div class="row px-4 my-4">
+            <div class="col-12 text-center">
+                Not a Member? <a href="{% url 'signuppage' %}">Register Here</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
