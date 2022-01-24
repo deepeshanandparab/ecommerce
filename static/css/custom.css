@@ -92,3 +92,7 @@ img.wooden-frame:hover {
 .no-border-radius{
 	border-radius: 0!important;
 }
+
+.cart-count-circle{
+	border-radius: 50%;
+}

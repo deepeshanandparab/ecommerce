@@ -86,11 +86,10 @@
             {% if products_list.count > 0 %}
             <div class="row mx-auto">
                 {% for product in products_list %}
-                <div class="card mx-auto mb-3" id="" style="width: 20rem;">
+                <div class="card mb-3 mx-auto" style="width: 23%;">
                     <a href="{% url 'productpage' product.id %}">
                     <img class="card-img-top wooden-frame cursor-pointer" height="250rem"
-                        src="{{ product.product.all.0.image.url }}"
-                        alt="Card image cap">
+                        src="{{ product.product.all.0.image.url }}">
                     </a>
                     
                     <div class="card-body">
