@@ -88,3 +88,7 @@ img.wooden-frame:hover {
 .no-artwork-section h4{
 	padding: 200px 0px;
 }
+
+.no-border-radius{
+	border-radius: 0!important;
+}

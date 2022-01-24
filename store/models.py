@@ -43,8 +43,8 @@ def get_upload_path(instance, filename):
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    price = models.FloatField()
-    discount = models.FloatField()
+    price = models.IntegerField()
+    discount = models.IntegerField()
     art_type = models.CharField(max_length=15, choices=ART_TYPE_CHOICES, default='', null=True, blank=True)
     art_category = models.CharField(max_length=50, choices=ART_CATEGORY_CHOICES, default='Others')
     description = models.CharField(max_length=500)

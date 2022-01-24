@@ -59,6 +59,7 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="craft">
                         <a class="dropdown-item" href="#">Craft</a>
+                        <a class="dropdown-item" href="#">Wallpaper</a>
                     </div>
                 </div>
 
@@ -85,10 +86,10 @@
             {% if products_list.count > 0 %}
             <div class="row mx-auto">
                 {% for product in products_list %}
-                <div class="card mx-auto mb-3" id="" style="width: 15rem;height: 100%;">
+                <div class="card mx-auto mb-3" id="" style="width: 20rem;">
                     <a href="{% url 'productpage' product.id %}">
-                    <img class="card-img-top wooden-frame cursor-pointer" height="100%"
-                        src="https://www.vangoghgallery.com/img/starry_night_full.jpg"
+                    <img class="card-img-top wooden-frame cursor-pointer" height="250rem"
+                        src="{{ product.product.all.0.image.url }}"
                         alt="Card image cap">
                     </a>
                     
@@ -97,12 +98,52 @@
                             <h5 class="card-title">{{product.name}}</h5>
                         </a>
                         <small class="card-blockquote">{{product.description|safe|truncatewords:"20"}}</small>
-                        <p class="card-text"><b>{{product.price|floatword_indian|currency}}</b></p>
+                        {% if product.discount == 0 %}
+                            <h5 class="my-3">Price: {{product.price|inrcurrency|currency}}</h5>
+                        {% else %}
+                            <h5 class="my-3">
+                                Price: <del>{{product.price|inrcurrency|currency}}</del>
+                                <small>{{product.price|discountedprice:product.discount|inrcurrency|currency}}</small>
+                            </h5>
+                        {% endif %}
                     </div>
 
-                    <div class="card-footer p-0 no-gutters">
-                        <a href="{% url 'productpage' product.id %}"
-                        class="float-right btn btn-light form-control">View</a>
+                    <div class="card-footer p-0">
+                        <div class="row">
+                            <div class="col-6 pr-0 border-right">
+                                <a href="#"
+                                class="float-right btn btn-light form-control no-border-radius">Add to Cart
+                                </a>
+                            </div>
+                            <div class="col-6 pl-0">
+                                <a href="{% url 'productpage' product.id %}"
+                                class="float-right btn btn-light form-control no-border-radius">View
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer p-0">
+                        <div class="row">
+                            <div class="col-6 pr-0 border-right">
+                                <div class="row">
+                                    <div class="col-4 text-center pr-0 border-right cursor-pointer">
+                                        <h6 class="pt-2">-</h6>
+                                    </div>
+                                    <div class="col-4 text-center px-0">
+                                        <h6 class="pt-2">10</h6>
+                                    </div>
+                                    <div class="col-4 text-center pl-0 border-left cursor-pointer">
+                                        <h6 class="pt-2">+</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6 pl-0">
+                                <a href="{% url 'productpage' product.id %}"
+                                class="float-right btn btn-light form-control no-border-radius">View
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div> 
                 {% endfor %}

@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load custom_filter %}
-{% load currency_filter %}
 
 {% block content %}
 <div class="container-fluid mt-3">
@@ -28,11 +27,11 @@
             <i>Art by: {{product.artist}}</i></br>
             <i>Sold by: {{product.sold_by}}</i>
             {% if product.discount == 0 %}
-                <h5 class="my-3">Price: {{product.price|floatword_indian|currency}}</h5>
+                <h5 class="my-3">Price: {{product.price|inrcurrency|currency}}</h5>
             {% else %}
                 <h5 class="my-3">
-                    Price: <del>{{product.price|floatword_indian|currency}}</del>
-                    <small>{{product.discount}}% discount</small>
+                    Price: <del>{{product.price|inrcurrency|currency}}</del>
+                    <small>{{product.price|discountedprice:product.discount|inrcurrency|currency}}</small>
                 </h5>
             {% endif %}
 
