@@ -51,6 +51,8 @@ class Product(models.Model):
     original_art_by = models.CharField(max_length=20)
     artist = models.ForeignKey(User, related_name='artist', on_delete=models.CASCADE)
     sold_by = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
