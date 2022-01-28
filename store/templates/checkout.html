@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row mx-auto my-3">
+    <div class="col-8">
+        <form method="post">
+        <div class="accordion" id="checkout-section">
+            <div class="card">
+                <div class="card-header collapsed" data-toggle="collapse" data-target="#info-section" aria-expanded="false">
+                    <span class="title font-bold">PERSONAL INFORMATION</span>
+                    <span class="accicon"><i class="fas fa-angle-down rotate-icon"></i></span>
+                </div>
+                <div id="info-section" class="collapse show" data-parent="#checkout-section">
+                    <div class="card-body">
+                            <div class="form-group row">
+                              <label for="order_first_name" class="col-sm-2 col-form-label">
+                                  First Name<sup class="text-danger">*</sup>
+                                </label>
+                              <div class="col-sm-10">
+                                <input type="text" class="form-control" id="order_first_name" required>
+                              </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="order_last_name" class="col-sm-2 col-form-label">
+                                    Last Name<sup class="text-danger">*</sup>
+                                </label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" id="order_last_name" required>
+                                </div>
+                              </div>
+
+                              <div class="form-group row">
+                                <label for="order_email" class="col-sm-2 col-form-label">
+                                    Email<sup class="text-danger">*</sup>
+                                </label>
+                                <div class="col-sm-10">
+                                  <input type="email" class="form-control" id="order_email" required>
+                                </div>
+                              </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" data-toggle="collapse" data-target="#address-section" aria-expanded="true">     
+                    <span class="title font-bold">ADDRESS DETAILS</span>
+                    <span class="accicon"><i class="fas fa-angle-down rotate-icon"></i></span>
+                </div>
+                <div id="address-section" class="collapse" data-parent="#checkout-section">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="order_addr1" class="col-sm-3 col-form-label">
+                                Address Line 1<sup class="text-danger">*</sup>
+                            </label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" id="order_addr1" 
+                              placeholder="House/Building, Locality" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="order_addr2" class="col-sm-3 col-form-label">Address Line 2</label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" id="order_addr2"
+                              placeholder="Road/Lane, City, State" >
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="order_pincode" class="col-sm-3 col-form-label">
+                                Pincode<sup class="text-danger">*</sup>
+                            </label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" id="order_pincode" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="order_country" class="col-sm-3 col-form-label">
+                                Country<sup class="text-danger">*</sup>
+                            </label>
+                            <div class="col-sm-9">
+                                <select class="selectpicker countrypicker" data-flag="true" ></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="order_del_method" class="col-sm-3 col-form-label">
+                                Delivery Method<sup class="text-danger">*</sup>
+                            </label>
+                            <div class="col-sm-9">
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="order_del_method" id="order_std_method" checked>
+                                <label class="form-check-label" for="order_std_method">
+                                  Standard (Free)
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="order_del_method" id="order_exp_method" >
+                                <label class="form-check-label" for="order_exp_method">
+                                  Express (Rs. 500)
+                                </label>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header collapsed" data-toggle="collapse" data-target="#contact-section" aria-expanded="false" aria-controls="collapseTwo">     
+                    <span class="title font-bold">CONTACT DETAILS</span>
+                    <span class="accicon"><i class="fas fa-angle-down rotate-icon"></i></span>
+                </div>
+                <div id="contact-section" class="collapse" data-parent="#checkout-section">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label for="order_contact" class="col-sm-3 col-form-label">
+                                Contact Number<sup class="text-danger">*</sup>
+                            </label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" id="order_contact" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="order_alternate_contact" class="col-sm-3 col-form-label">
+                                Alternate Contact
+                            </label>
+                            <div class="col-sm-9">
+                              <input type="text" class="form-control" id="order_alternate_contact">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row mt-3">
+            <div class="col-sm-1 pt-3">
+              <input type="checkbox" class="float-right" value="" id="order_terms">
+            </div>
+            <label for="order_terms" class="col-sm-8 col-form-label">
+                I have read and consent to ArtChakra Processing my information in accordance with the Privacy Statement and Cookie Policy.
+            </label>
+            <div class="col-sm-3 pt-3">
+                <input type="submit" class="btn btn-success" value="Proceed to Billing">
+            </div>
+        </div>
+        </form>
+    </div>
+
+    <div class="col-4">
+        <div class="card">
+            <div class="card-header">     
+                <span class="title font-bold">SUMMARY</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">SUBTOTAL</div>
+                    <div class="col-4 text-right">Rs. 10,000</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8">SHIPPING</div>
+                    <div class="col-4 text-right">FREE</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8">TAXES(GST+CGST)</div>
+                    <div class="col-4 text-right">Rs. 3,600</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8 font-bold">TOTAL</div>
+                    <div class="col-4 text-right font-bold text-primary">Rs. 13,600</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="font-bold">SHIPPING AND DELIVERY</p>
+                        Orders are delivered on 5 to 6 business days (Monday-Friday) 
+                        excluding public holidays. Express delivery options are also avalible with 
+                        shipping. Express delivery includes same day delivery or 2-3 days delivery if 
+                        availble on product based on delivery location. Extra charges apply for express delivery.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

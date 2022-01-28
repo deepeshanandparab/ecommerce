@@ -104,11 +104,43 @@ def orderspage(request):
 
 
 class CartPage(View):
+    def post(self, request):
+        product = request.POST.get('product')
+        remove = request.POST.get('remove')
+        cart = request.session.get('cart')
+
+        if cart:
+            quantity = cart.get(product)
+            if quantity:
+                if remove:
+                    if quantity <= 1:
+                        cart.pop(product)
+                    else:    
+                        cart[product] = quantity-1
+                else:
+                    cart[product] = quantity+1
+            else:
+                cart[product] = 1
+        else:
+            cart = {}
+            cart[product] = 1
+        request.session['cart'] = cart        
+        return redirect('cartpage')
+
 
     def get(self, request):
         ids = list(request.session.get('cart').keys())
         cart_list = Product.get_products_by_id(ids) 
         return render(request, 'cart.html', {'cart_list':cart_list})   
+
+
+class CheckoutPage(View):
+    def post(self, request):
+        pass
+
+
+    def get(self, request):
+        return render(request, 'checkout.html')
 
 
 def supplypage(request):

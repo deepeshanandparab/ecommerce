@@ -45,6 +45,7 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     price = models.IntegerField()
     discount = models.IntegerField()
+    discounted_price = models.IntegerField(null=True, blank=True)
     art_type = models.CharField(max_length=15, choices=ART_TYPE_CHOICES, default='', null=True, blank=True)
     art_category = models.CharField(max_length=50, choices=ART_CATEGORY_CHOICES, default='Others')
     description = models.CharField(max_length=500)
@@ -59,6 +60,11 @@ class Product(models.Model):
     @staticmethod
     def get_products_by_id(ids):
         return Product.objects.filter(id__in =ids)
+    
+
+    def save_discounted_price(self, price, discount):
+        self.discounted_price =  price * (1-discount/100)
+        self.save()
 
 
     def __str__(self):
