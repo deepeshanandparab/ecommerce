@@ -57,10 +57,9 @@ def signup(request):
 
 def login(request):
     if request.method == 'POST':
-        print('POST method')
         user = auth.authenticate(username=request.POST['username'], password=request.POST['password'])
-        print(request.POST['username'])
         if user is not None:
+            request.session['username'] = request.POST['username']
             auth.login(request, user)
             return redirect('homepage')
         else:

@@ -26,10 +26,14 @@ def inrcurrency(number):
     if len(list) <= 3:
         value = listToString(list)
         return value
-    elif len(list) > 3 and len(list) <= 5:
+    elif len(list) > 3 and len(list) < 5:
         list.insert(1, ",")
         value = listToString(list) # value = 1,000
-        return value 
+        return value
+    elif len(list) == 5:
+        list.insert(2, ",")
+        value = listToString(list) # value = 1,000
+        return value  
     elif len(list) > 5 and len(list) <= 7:
         list.insert(1, ",")
         list.insert(4,",")
@@ -55,4 +59,9 @@ def multiply(number , number1):
 @register.filter(name='discountedprice')
 def discountedprice(price , discount):
     return int(price * (1 - discount/100))
+
+
+@register.filter(name='cart_count')
+def cart_count(cart):
+    return len(cart)
 

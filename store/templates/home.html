@@ -3,6 +3,7 @@
 {% load custom_filter %}
 {% load currency_filter %}
 {% load mathfilters %}
+{% load cart %}
 
 {% block content %}
 <div class="container-fluid mt-3">
@@ -98,7 +99,7 @@
             {% if products_list.paginator.count > 0 %}
             <div class="row mx-auto">
                 {% for product in products_list %}
-                <div class="card mb-3 mx-auto" style="width: 23%;">
+                <div class="card mb-3 mx-auto" style="width: 23%;" id="product_{{product.id}}">
                     <a href="{% url 'productpage' product.id %}">
                     <img class="card-img-top wooden-frame cursor-pointer" height="200rem"
                         src="{{ product.product.all.0.image.url }}">
@@ -120,39 +121,41 @@
 
                     <div class="card-footer p-0">
                         <div class="row">
-                            <div class="col-6 pr-0 border-right">
-                                <a href="#"
-                                class="float-right btn btn-light form-control no-border-radius">Add to Cart
-                                </a>
-                            </div>
-                            <div class="col-6 pl-0">
-                                <a href="{% url 'productpage' product.id %}"
-                                class="float-right btn btn-light form-control no-border-radius">View
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                            {% if product|is_in_cart:request.session.cart %}
+                            <div class="col-12 border-right">
+                                <div class="row no-gutters">
+                                    <div class="col-3 text-center border-right cursor-pointer">
+                                        <form action="/?page={{page_number}}#product_{{product.id}}" method="post">
+                                            {% csrf_token %}
+                                            <input type="text" name="product" value="{{product.id}}" hidden> 
+                                            <input type="text" name="remove" value="True" hidden>
+                                            <input type="submit" class="btn btn-light form-control no-border-radius" value="-">
+                                        </form>
+                                    </div>
 
-                    <div class="card-footer p-0">
-                        <div class="row">
-                            <div class="col-6 pr-0 border-right">
-                                <div class="row">
-                                    <div class="col-4 text-center pr-0 border-right cursor-pointer">
-                                        <h6 class="pt-2">-</h6>
+                                    <div class="col-6 text-center">
+                                        <h6 class="pt-2">{{product|cart_quantity:request.session.cart}} in cart</h6>
                                     </div>
-                                    <div class="col-4 text-center px-0">
-                                        <h6 class="pt-2">10</h6>
-                                    </div>
-                                    <div class="col-4 text-center pl-0 border-left cursor-pointer">
-                                        <h6 class="pt-2">+</h6>
+
+                                    <div class="col-3 text-center border-left cursor-pointer">
+                                        <form action="/?page={{page_number}}#product_{{product.id}}" method="post">
+                                            {% csrf_token %}
+                                            <input type="text" name="product" value="{{product.id}}" hidden> 
+                                            <input type="submit" class="btn btn-light form-control no-border-radius" value="+">
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 pl-0">
-                                <a href="{% url 'productpage' product.id %}"
-                                class="float-right btn btn-light form-control no-border-radius">View
-                                </a>
+                            {% else %}
+                            <div class="col-12 border-right">
+                                <form method="post" action="/?page={{page_number}}#product_{{product.id}}">
+                                    {% csrf_token %}
+                                    <input type="text" name="product" value="{{product.id}}" hidden> 
+                                    <input type="submit" 
+                                    class="float-right btn btn-light form-control no-border-radius" value="Add to Cart">
+                                </form>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div> 
