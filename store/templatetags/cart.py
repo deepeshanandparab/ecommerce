@@ -35,11 +35,35 @@ def price_total(product, cart):
 
 @register.filter(name='total_cart_price')
 def total_cart_price(products , cart):
-    print('products', products)
     sum = 0 ;
     for p in products:
         sum += price_total(p , cart)
 
     price = inrcurrency(sum)
     return currency(price)
+
+
+@register.filter(name='checkout_cart_price')
+def checkout_cart_price(products , cart):
+    sum = 0 ;
+    for p in products:
+        sum += price_total(p , cart)
+
+    return int(sum)
+
+
+@register.filter(name='checkout_taxes')
+def checkout_taxes(products , cart):
+    cart_price = checkout_cart_price(products , cart)
+    gst = cart_price * 0.12
+    cgst = cart_price * 0.12
+    taxes = gst + cgst
+
+    return int(taxes)
+
+
+@register.filter(name='checkout_total')
+def checkout_total(products , cart):
+    total = checkout_cart_price(products , cart) + checkout_taxes(products , cart)
+    return total
     

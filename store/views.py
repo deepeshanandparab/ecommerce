@@ -1,6 +1,8 @@
 from django.shortcuts import redirect, render
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from .models import Product
+from .models import Product, Order
+from django.contrib.auth.models import User
 from .filters import ProductSearch
 from django.views import View
 
@@ -64,44 +66,11 @@ class HomePage(View):
 
 
 
-# # Create your views here.
-# def homepage(request):
-#     keyword = request.GET.get('name')
-#     if keyword != None:
-#         product_list = Product.objects.filter(name__contains=keyword, approved=True).order_by('-created_at')
-#     else:
-#         product_list = Product.objects.filter(name__contains='', approved=True).order_by('-created_at')
-
-#     paginator = Paginator(product_list, 4)
-#     page = request.GET.get('page')
-#     try:
-#         response = paginator.page(page)
-#     except PageNotAnInteger:
-#         response = paginator.page(1)
-#     except EmptyPage:
-#         response = paginator.page(paginator.num_pages)
-
-#     first_item_number = 4 * (response.number - 1) + 1
-
-#     context = {
-#                 'title': 'Home',
-#                 'search_filter': product_list,
-#                 'products_list': response,
-#                 'page_size': 4,
-#                 'first_item_number': first_item_number,
-#                 'search_keyword': keyword}
-#     return render(request, 'home.html', context)
-
-
 def productpage(request, id):
     products_list = Product.objects.filter(id=id)
     context = {'title': 'Product', 'products_list': products_list}
     return render(request, 'product.html', context)    
-
-
-def orderspage(request):
-    return render(request, 'orders.html')   
-
+  
 
 class CartPage(View):
     def post(self, request):
@@ -134,13 +103,69 @@ class CartPage(View):
         return render(request, 'cart.html', {'cart_list':cart_list})   
 
 
-class CheckoutPage(View):
+class CheckoutPage(LoginRequiredMixin, View):
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
+
+    def post(self, request):
+        username = request.session.get('username')
+        first_name = request.POST.get('order_first_name')
+        last_name = request.POST.get('order_last_name')
+        email = request.POST.get('order_email')
+        addr1 = request.POST.get('order_addr1')
+        addr2 = request.POST.get('order_addr2')
+        pincode = request.POST.get('order_pincode')
+        country = request.POST.get('order_country')
+        del_method = request.POST.get('order_del_method')
+        contact = request.POST.get('order_contact')
+        alternate_contact = request.POST.get('order_alternate_contact')
+        terms = request.POST.get('order_terms')
+        cart = request.session.get('cart')
+        products = Product.get_products_by_id(list(cart.keys()))
+        
+        for product in products:
+            order = Order(
+                product = product,
+                user = request.user,
+                quantity = cart.get(str(product.id)),
+                price = product.price,
+                first_name = first_name,
+                last_name = last_name,
+                email = email,
+                addr1 = addr1,
+                addr2 = addr2,
+                pincode = pincode,
+                country = country,
+                delivery_method = del_method,
+                contact = contact,
+                alt_contact = alternate_contact,
+                terms = terms
+            )
+            order.save()
+            request.session['cart'] = {}
+        return redirect('orderspage')
+
+
+    def get(self, request):
+        ids = list(request.session.get('cart').keys())
+        cart_list = Product.get_products_by_id(ids)
+        return render(request, 'checkout.html', {'cart_list':cart_list})
+
+
+
+class OrdersPage(LoginRequiredMixin, View):
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
+
+    
     def post(self, request):
         pass
 
 
     def get(self, request):
-        return render(request, 'checkout.html')
+        order_list = Order.objects.filter(user=request.user).order_by('-date')
+        return render(request, 'orders.html', {'order_list':order_list})
+
 
 
 def supplypage(request):

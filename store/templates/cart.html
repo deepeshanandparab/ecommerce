@@ -21,7 +21,7 @@
               <th scope="col" class="text-center">Total</th>
             </tr>
           </thead>
-          {% if request.session.username %}
+          {% if request.session.username and cart_list.count > 0 %}
           <tbody>
             {% for cart in cart_list %}
             <tr>
@@ -78,7 +78,7 @@
               <td class="h5">{{cart_list|total_cart_price:request.session.cart}}</td>
             </tr>
             </tbody>
-            {% else %}
+          {% else %}
             <tbody>
               <tr>
                 <td colspan="6" class="no-cart-item">
@@ -86,11 +86,13 @@
                 </td>
               </tr>
             </tbody>
-            {% endif %}
+          {% endif %}
         </table>
     </div>
     <div class="col-12">
-      <input type="submit" class="btn btn-secondary float-right no-border-radius" value="Checkout">
+      {% if cart_list.count > 0 %}
+      <a href="{% url 'checkoutpage' %}" class="btn btn-secondary float-right no-border-radius">Checkout</a>
+      {% endif %}
     </div>
   </div>
 </div>

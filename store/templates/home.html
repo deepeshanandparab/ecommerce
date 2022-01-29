@@ -105,7 +105,7 @@
                         src="{{ product.product.all.0.image.url }}">
                     </a>
                     
-                    <div class="card-body align-items-end">
+                    <div class="card-body">
                         <a class="no-text-decoration text-dark" href="{% url 'productpage' product.id %}">
                             <h6 class="card-title">{{product.name}}</h6>
                         </a>
@@ -117,6 +117,19 @@
                                 <small>{{product.price|discountedprice:product.discount|inrcurrency|currency}}</small>
                             </p>
                         {% endif %}
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-4">
+                                <i class="far fa-heart text-danger"></i>
+                            </div>
+                            <div class="col-8">
+                                <span class="float-right">
+                                    4.5/5 <i class="fa fa-star text-primary"></i>
+                                </span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="card-footer p-0">

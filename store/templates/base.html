@@ -78,9 +78,13 @@
                                     </b>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    {% if request.user.is_superuser %}
+                                    <a class="dropdown-item" href="{% url 'profilepage' %}">Admin Dashboard</a>
+                                    {% endif %}
                                     <a class="dropdown-item" href="{% url 'profilepage' %}">Profile</a>
                                     <a class="dropdown-item" href="{% url 'myartpage' %}">My Art</a>
                                     <a class="dropdown-item" href="{% url 'orderspage' %}">Orders</a>
+                                    <a class="dropdown-item" href="{% url 'orderspage' %}">Wishlist</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{% url 'logoutpage' %}">Logout</a>
                                 </div>

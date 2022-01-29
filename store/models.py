@@ -2,7 +2,7 @@ from itertools import product
 from django.db import models
 from django.contrib.auth.models import User
 from multiselectfield import MultiSelectField
-
+import datetime
 from account.views import profile
 
 
@@ -32,6 +32,11 @@ CANVAS_SIZE_CHOICES = (
     ('6x8','6x8'),
     ('12x16','12x16'),
     ('24x32','24x32')
+)
+
+ORDER_STATUS_CHOICES = (
+    ('pending','pending'),
+    ('complete','complete')
 )
 
 
@@ -98,3 +103,27 @@ class ImageAlbum(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Order(models.Model):
+    product = models.ForeignKey(Product, related_name='order_product', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='order_user', on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    price = models.IntegerField()
+    first_name = models.CharField(max_length=20, default='')
+    last_name = models.CharField(max_length=20, default='')
+    email = models.EmailField(max_length=30, default='')
+    addr1 = models.TextField(max_length=100, default='')
+    addr2 = models.TextField(max_length=100, default='')
+    pincode = models.CharField(max_length=10, default='')
+    country = models.CharField(max_length=20, default='')
+    delivery_method = models.CharField(max_length=10, default='standard')
+    contact = models.CharField(max_length=10, default='')
+    alt_contact = models.CharField(max_length=10, null=True, blank=True)
+    terms = models.CharField(max_length=10, default='accepted')
+    date = models.DateField(default=datetime.datetime.today)
+    status = models.CharField(max_length=15, choices=ORDER_STATUS_CHOICES, default='pending')
+
+    def __str__(self):
+        return f'Order: {self.product.name}({self.quantity}) - {self.price} \
+                        by {self.first_name} {self.last_name} {self.date}'

@@ -1,5 +1,70 @@
 {% extends 'base.html' %}
+{% load custom_filter %}
+{% load mathfilters %}
+{% load cart %}
 
 {% block content %}
-<h1 class="mx-auto">Orders</h1>
+<div class="container">
+  <div class="row my-3">
+    <div class="col-12">
+      {% if request.session.username %}
+      <h5 class="mb-2">{{request.session.username|title}}'s Orders</h2>
+      {% endif %}
+
+        <table class="table table-bordered bg-white" id="cart-table">
+          <thead>
+            <tr>
+              <th scope="col" class="text-center">#</th>
+              <th scope="col" class="text-center">Image</th>
+              <th scope="col">Product Name</th>
+              <th scope="col" class="text-center">Price</th>
+              <th scope="col" class="text-center">Quantity</th>
+              <th scope="col" class="text-center">Total</th>
+              <th scope="col" class="text-center">Date</th>
+              <th scope="col" class="text-center">Payment Mode</th>
+              <th scope="col" class="text-center">Payment Status</th>
+              <th scope="col" class="text-center">Delivery</th>
+              <th scope="col" class="text-center">Status</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+            {% if order_list.count > 0 %}
+            <tbody>
+                {% for order in order_list %}
+                <tr>
+                    <td class="text-center">{{forloop.counter}}</td>
+                    <td class="text-center"><img src={{order.product.product.all.0.image.url}} class="cart-image"></td>
+                    <td>{{order.product.name}}</td>
+                    <td class="text-center">{{order.price}}</td>
+                    <td class="text-center">{{order.quantity}}</td>
+                    <td class="text-center">{{order.quantity|mul:order.price}}</td>
+                    <td class="text-center">{{order.date}}</td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center">{{order.delivery_method|title}}</td>
+                    <td class="text-center {% if order.status == 'pending' %} text-danger {% endif %}">
+                        {{order.status|title}}
+                    </td>
+                    <td class="text-center">
+                        {% if order.status == 'pending' %}
+                        <input type="submit" class="btn btn-secondary btn-sm" value="Cancel Order">
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            {% else %}
+            <tbody>
+              <tr>
+                <td colspan="12" class="no-cart-item">
+                  No orders found
+                </td>
+              </tr>
+            </tbody>
+            {% endif %}
+        </table>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
