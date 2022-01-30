@@ -122,7 +122,18 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-4">
-                                <i class="far fa-heart text-danger"></i>
+                                {% if request.session.username %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                     <a href="{% url 'product_wishlist' product.id %}" class="no-text-decoration" title="Wishlist">
+                                        {% if request.user in product.wishlist.all %}
+                                            <i class="fa fa-heart text-danger" title="Added to Wishlist"></i>
+                                         {% else %}
+                                            <i class="far fa-heart text-danger" title="Add to Wishlist"></i>
+                                         {% endif %}
+                                    </a>
+                                </form>
+                                {% endif %}
                             </div>
                             <div class="col-8">
                                 <span class="float-right">

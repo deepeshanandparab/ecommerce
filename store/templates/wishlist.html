@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load cart %}
+{% load custom_filter %}
+
+{% block content %}
+<div class="container">
+    <div class="row my-3">
+      <div class="col-12">
+        {% if request.session.username %}
+        <h5 class="mb-2">{{request.session.username|title}}'s Wishlist ({{wishlist|length}})</h2>
+        {% endif %}
+  
+          <table class="table table-bordered bg-white" id="cart-table">
+            <thead>
+              <tr>
+                <th scope="col" class="text-center">#</th>
+                <th scope="col" class="text-center">Image</th>
+                <th scope="col">Product Name</th>
+                <th scope="col" class="text-center">Price</th>
+              </tr>
+            </thead>
+              {% if wishlist|length > 0 %}
+              <tbody>
+                  {% for wish in wishlist %}
+                  <tr>
+                      <td class="text-center">{{forloop.counter}}</td>
+                      <td class="text-center">
+                        <a href="{% url 'productpage' wish.id %}">
+                          <img src={{wish.product.all.0.image.url}} class="cart-image">
+                        </a>
+                      </td>
+                      <td>
+                        <a href="{% url 'productpage' wish.id %}" class="no-text-decoration text-secondary">
+                          {{wish.name}}
+                        </a>
+                      </td>
+                      <td class="text-center">{{wish.price|inrcurrency|currency}}</td>
+                      <td class="text-center">
+                        <form method="post">
+                          {% csrf_token %}
+                          <input type="text" value="{{wish.id}}" name="product_id" hidden>
+                          <input type="submit" class="btn btn-secondary btn-sm" value="Remove">
+                        </form>
+                      </td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+              {% else %}
+              <tbody>
+                <tr>
+                  <td colspan="12" class="no-cart-item">
+                    No products in wishlist
+                  </td>
+                </tr>
+              </tbody>
+              {% endif %}
+          </table>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

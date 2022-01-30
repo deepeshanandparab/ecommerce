@@ -1,7 +1,8 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from .models import Product, Order
+from .models import Product, Order, Wishlist
 from django.contrib.auth.models import User
 from .filters import ProductSearch
 from django.views import View
@@ -28,8 +29,8 @@ class HomePage(View):
         else:
             cart = {}
             cart[product] = 1
-        request.session['cart'] = cart  
-        print('cart', cart)      
+        request.session['cart'] = cart
+        
         return redirect('homepage')
 
 
@@ -52,7 +53,7 @@ class HomePage(View):
         except EmptyPage:
             response = paginator.page(paginator.num_pages)
 
-        first_item_number = 8 * (response.number - 1) + 1
+        first_item_number = 8 * (response.number - 1) + 1 
 
         context = {
                     'title': 'Home',
@@ -68,7 +69,13 @@ class HomePage(View):
 
 def productpage(request, id):
     products_list = Product.objects.filter(id=id)
-    context = {'title': 'Product', 'products_list': products_list}
+
+    if products_list[0].wishlist.filter(id=request.user.id).exists():
+        is_wishlisted = True
+    else:
+        is_wishlisted = False
+
+    context = {'title': 'Product', 'products_list': products_list, 'is_wishlisted': is_wishlisted}
     return render(request, 'product.html', context)    
   
 
@@ -166,6 +173,44 @@ class OrdersPage(LoginRequiredMixin, View):
         order_list = Order.objects.filter(user=request.user).order_by('-date')
         return render(request, 'orders.html', {'order_list':order_list})
 
+
+
+class WishlistPage(LoginRequiredMixin, View):
+    login_url = '/login'
+    redirect_field_name = 'redirect_to'
+
+    
+    def post(self, request):
+        product_id = request.POST.get('product_id')
+        product = Product.objects.get(id=product_id)
+        if product.wishlist.filter(id=request.user.id).exists():
+            product.wishlist.remove(request.user)
+            Wishlist.objects.filter(product_id=product, user_id=request.user).delete()
+        return redirect('wishlistpage')
+
+
+    def get(self, request):
+        product = Product.objects.all()
+        wishlist = []
+        for p in product:
+            if p.wishlist.filter(id=request.user.id).exists():
+                wishlist.append(p)
+        return render(request, 'wishlist.html', {'wishlist': wishlist})
+
+
+@login_required
+def wishlistProduct(request, id):
+    product = Product.objects.get(id=id)
+    is_wishlist = False
+    if product.wishlist.filter(id=request.user.id).exists():
+        product.wishlist.remove(request.user)
+        Wishlist.objects.filter(product_id=product, user_id=request.user).delete()
+        is_wishlist = False
+    else:
+        product.wishlist.add(request.user)
+        Wishlist.objects.create(product_id=product, user_id=request.user)
+        is_wishlist = True
+    return redirect('productpage', id)
 
 
 def supplypage(request):

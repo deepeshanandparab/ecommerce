@@ -1,4 +1,5 @@
 from itertools import product
+from select import select
 from django.db import models
 from django.contrib.auth.models import User
 from multiselectfield import MultiSelectField
@@ -58,6 +59,7 @@ class Product(models.Model):
     artist = models.ForeignKey(User, related_name='artist', on_delete=models.CASCADE)
     sold_by = models.CharField(max_length=20)
     approved = models.BooleanField(default=False)
+    wishlist = models.ManyToManyField(User, related_name='wishlist', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -127,3 +129,11 @@ class Order(models.Model):
     def __str__(self):
         return f'Order: {self.product.name}({self.quantity}) - {self.price} \
                         by {self.first_name} {self.last_name} {self.date}'
+
+
+class Wishlist(models.Model):
+    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='wishlist_product')
+    user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING,  related_name='wishlist_user')
+
+    def __str__(self):
+        return f'{self.user_id} wishlisted product number : {self.product_id.name}'
