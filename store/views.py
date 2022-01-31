@@ -2,12 +2,48 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from .models import Product, Order, Wishlist
+from .models import Product, Order, Wishlist, RatingReview
 from django.contrib.auth.models import User
 from .filters import ProductSearch
 from django.views import View
+from .forms import ReviewForm
+from django.contrib import messages
 
-class HomePage(View):
+class IndexPage(View):
+
+    def post(self, request):
+        product = request.POST.get('product')
+        remove = request.POST.get('remove')
+        cart = request.session.get('cart')
+        print('cart', cart)
+        if cart:
+            quantity = cart.get(product)
+            if quantity:
+                if remove:
+                    if quantity <= 1:
+                        cart.pop(product)
+                    else:    
+                        cart[product] = quantity-1
+                else:
+                    cart[product] = quantity+1
+            else:
+                cart[product] = 1
+        else:
+            cart = {}
+            cart[product] = 1
+        request.session['cart'] = cart
+
+        return redirect('homepage')
+
+
+    def get(self, request):
+        products_list = Product.objects.all()
+        context = {'products_list': products_list}
+        return render(request, 'index.html', context)
+
+
+
+class ShopPage(View):
 
     def post(self, request):
         product = request.POST.get('product')
@@ -31,7 +67,7 @@ class HomePage(View):
             cart[product] = 1
         request.session['cart'] = cart
         
-        return redirect('homepage')
+        return redirect('storepage')
 
 
     def get(self, request):
@@ -63,20 +99,38 @@ class HomePage(View):
                     'page_number': page,
                     'first_item_number': first_item_number,
                     'search_keyword': keyword}
-        return render(request, 'home.html', context)
+        return render(request, 'shop.html', context)
 
 
 
 def productpage(request, id):
     products_list = Product.objects.filter(id=id)
-
+    rating_list = RatingReview.objects.filter(product=id)
+    overall_rating = overallrating(rating_list)
+    
     if products_list[0].wishlist.filter(id=request.user.id).exists():
         is_wishlisted = True
     else:
         is_wishlisted = False
 
-    context = {'title': 'Product', 'products_list': products_list, 'is_wishlisted': is_wishlisted}
+    context = {
+            'title': 'Product', 
+            'products_list': products_list, 
+            'is_wishlisted': is_wishlisted,
+            'rating_list': rating_list,
+            'overall_rating': overall_rating
+            }
     return render(request, 'product.html', context)    
+
+
+def overallrating(rating_list):
+    overall_rating = 0.0
+
+    for rating in rating_list:
+        print('rating', rating)
+        overall_rating += rating.rating
+        print('overall_rating', overall_rating)
+    return overall_rating
   
 
 class CartPage(View):
@@ -213,15 +267,29 @@ def wishlistProduct(request, id):
     return redirect('productpage', id)
 
 
-def supplypage(request):
-    return render(request, 'supply.html')
+
+def submit_review(request, id):
+    if request.method == 'POST':
+        try:
+            reviews = RatingReview.objects.get(user__id=request.user.id, product__id=id)
+            form = ReviewForm(request.POST, instance=reviews)
+            form.save()
+            messages.success(request, 'Thank you! Your review has been updated.')
+            return redirect('productpage', id)
+        except RatingReview.DoesNotExist:
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                data = RatingReview()
+                data.subject = form.cleaned_data['subject']
+                data.rating = form.cleaned_data['rating']
+                data.review = form.cleaned_data['review']
+                data.ip = request.META.get('REMOTE_ADDR')
+                data.product_id = id
+                data.user_id = request.user.id
+                data.save()
+                messages.success(request, 'Thank you! Your review has been submitted.')
+                return redirect('productpage', id)
 
 
-def salepage(request):
-    return render(request, 'sale.html')  
-
-
-def topsellingpage(request):
-    return render(request, 'top_selling.html')  
 
 

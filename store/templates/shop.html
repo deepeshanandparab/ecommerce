@@ -24,7 +24,7 @@
                         <input type="text" name="name" autocomplete="false" class="form-control search-textbox" id="id_name">
                     </div>
                     <div class="col-xs-2 mr-1">
-                        <button class="btn btn-dark wooden-button search-button" type="submit">Search</button>
+                        <button class="btn btn-dark search-button" type="submit">Search</button>
                         <a href="{% url 'homepage' %}" class="no-text-decoration text-dark"><small><b>Clear</b></small></a>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
 
                 <label>Paintings</label>
                 <div class="dropdown mb-3">
-                    <button class="wooden-button btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="painting"
+                    <button class="btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="painting"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select paintings
                     </button>
@@ -53,7 +53,7 @@
 
                 <label>Antiques</label>
                 <div class="dropdown mb-3">
-                    <button class="wooden-button btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="antique"
+                    <button class="btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="antique"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select antiques
                     </button>
@@ -66,7 +66,7 @@
 
                 <label>Paper Craft</label>
                 <div class="dropdown mb-3">
-                    <button class="wooden-button btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="craft"
+                    <button class="btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="craft"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select carft
                     </button>
@@ -78,7 +78,7 @@
 
                 <label>Furniture</label>
                 <div class="dropdown mb-3">
-                    <button class="wooden-button btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="furniture"
+                    <button class="btn btn-dark btn-sm dropdown-toggle w-100" type="button" id="furniture"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select furniture
                     </button>
@@ -90,7 +90,9 @@
                     </div>
                 </div>
 
-                <button class="btn btn-dark btn-sm my-2">Clear</button>
+                <a href="#" class="my-2 no-text-decoration text-secondary text-center cursor-pointer">
+                    Clear Filter
+                </a>
             </div>
         </div>
 
@@ -101,7 +103,7 @@
                 {% for product in products_list %}
                 <div class="card mb-3 mx-auto" style="width: 23%;" id="product_{{product.id}}">
                     <a href="{% url 'productpage' product.id %}">
-                    <img class="card-img-top wooden-frame cursor-pointer" height="200rem"
+                    <img class="card-img-top cursor-pointer" height="200rem"
                         src="{{ product.product.all.0.image.url }}">
                     </a>
                     

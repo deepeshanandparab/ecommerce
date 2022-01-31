@@ -21,7 +21,7 @@
               <th scope="col" class="text-center">Total</th>
             </tr>
           </thead>
-          {% if request.session.username and cart_list.count > 0 %}
+          {% if cart_list.count > 0 %}
           <tbody>
             {% for cart in cart_list %}
             <tr>

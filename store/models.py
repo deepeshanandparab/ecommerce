@@ -1,4 +1,5 @@
 from itertools import product
+from operator import mod
 from select import select
 from django.db import models
 from django.contrib.auth.models import User
@@ -137,3 +138,18 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f'{self.user_id} wishlisted product number : {self.product_id.name}'
+
+
+class RatingReview(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='rating_product')
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING,  related_name='rating_user')
+    subject = models.CharField(max_length=20, null=True, blank=True)
+    rating = models.FloatField()
+    review = models.TextField(max_length=200, blank=True)
+    ip = models.CharField(max_length=20, null=True, blank=True)
+    status = models.BooleanField(default=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.user} rated {self.product.name} with {self.rating} stars'

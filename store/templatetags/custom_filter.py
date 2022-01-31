@@ -65,3 +65,4 @@ def discountedprice(price , discount):
 def cart_count(cart):
     return len(cart)
 
+
