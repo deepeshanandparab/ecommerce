@@ -151,5 +151,6 @@ class RatingReview(models.Model):
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
+
     def __str__(self):
         return f'{self.user} rated {self.product.name} with {self.rating} stars'

@@ -8,6 +8,7 @@ from .filters import ProductSearch
 from django.views import View
 from .forms import ReviewForm
 from django.contrib import messages
+from django.db.models import Sum
 
 class IndexPage(View):
 
@@ -38,9 +39,9 @@ class IndexPage(View):
 
     def get(self, request):
         products_list = Product.objects.all()
-        context = {'products_list': products_list}
+        ratings_list = RatingReview.objects.all()
+        context = {'products_list': products_list, 'ratings_list':ratings_list}
         return render(request, 'index.html', context)
-
 
 
 class ShopPage(View):
@@ -71,12 +72,15 @@ class ShopPage(View):
 
 
     def get(self, request):
+        ratings_list = RatingReview.objects.all()
+
         cart = request.session.get('cart')
         if not cart:
             request.session['cart'] = {}
+
         keyword = request.GET.get('name')
         art_category = request.GET.get('art_category')
-        print('art_category', art_category)
+
         if keyword != None:
             if art_category != None:
                 product_list = Product.objects.filter(name__contains=keyword, approved=True, 
@@ -108,7 +112,9 @@ class ShopPage(View):
                     'page_size': 8,
                     'page_number': page,
                     'first_item_number': first_item_number,
-                    'search_keyword': keyword}
+                    'search_keyword': keyword,
+                    'ratings_list': ratings_list
+                    }
         return render(request, 'shop.html', context)
 
 
@@ -137,9 +143,7 @@ def overallrating(rating_list):
     overall_rating = 0.0
 
     for rating in rating_list:
-        print('rating', rating)
         overall_rating += rating.rating
-        print('overall_rating', overall_rating)
     return overall_rating
   
 

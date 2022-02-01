@@ -50,6 +50,21 @@ def inrcurrency(number):
         return value
       
 
+@register.filter(name='overall_rating')
+def overall_rating(rating_list, product):
+    sum = 0
+    ratings_count = 0
+    for r in rating_list:
+        if r.product.id == product.id:
+            sum += r.rating
+            ratings_count += 1
+
+    if ratings_count > 0:
+        ovr_rating = float(sum)/ratings_count
+    else:
+        ovr_rating = float(sum)
+    return ovr_rating
+
 
 @register.filter(name='multiply')
 def multiply(number , number1):
