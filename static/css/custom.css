@@ -342,3 +342,10 @@ img.wooden-frame:hover {
   .rating-star i{
 	color: #ffb503 !important;
   }
+
+/*--------------------------------------------------------------------------------*/
+
+.checkout-cart-price{
+  width: 70px;
+  text-align: center;
+}

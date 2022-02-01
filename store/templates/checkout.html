@@ -199,6 +199,25 @@
             </div>
         </div>
 
+
+        <div class="card mt-2">
+            <div class="card-header">
+                <span class="title font-bold">CART</span>
+            </div>
+            <div class="card-body">
+                <table>
+                    {% for cart in cart_list %}
+                    <tr class="{% if forloop.counter != 1 %}border-top{% endif %}">
+                        <td class="text-center py-2"><img src="{{cart.product.all.0.image.url}}" class="cart-image"></td>
+                        <td class="pl-2 py-2"><small>{{cart.name}}</small></td>
+                        <td class="checkout-cart-price py-2"><small>{{cart.price|discountedprice:cart.discount|inrcurrency|currency}}</small></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+
         <div class="card mt-2">
             <div class="card-body">
                 <div class="row">
