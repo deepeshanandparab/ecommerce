@@ -75,10 +75,20 @@ class ShopPage(View):
         if not cart:
             request.session['cart'] = {}
         keyword = request.GET.get('name')
+        art_category = request.GET.get('art_category')
+        print('art_category', art_category)
         if keyword != None:
-            product_list = Product.objects.filter(name__contains=keyword, approved=True).order_by('-created_at')
+            if art_category != None:
+                product_list = Product.objects.filter(name__contains=keyword, approved=True, 
+                art_category=art_category).order_by('-created_at')
+            else:
+                product_list = Product.objects.filter(name__contains=keyword, approved=True).order_by('-created_at')
         else:
-            product_list = Product.objects.filter(name__contains='', approved=True).order_by('-created_at')
+            if art_category != None:
+                product_list = Product.objects.filter(name__contains='', approved=True,
+                art_category=art_category).order_by('-created_at')
+            else:
+                product_list = Product.objects.filter(name__contains='', approved=True).order_by('-created_at')
 
         paginator = Paginator(product_list, 8)
         page = request.GET.get('page')

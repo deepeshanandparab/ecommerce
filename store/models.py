@@ -17,12 +17,12 @@ ART_TYPE_CHOICES = (
 
 ART_CATEGORY_CHOICES = (
     ('sketch', 'sketch'),
-    ('canvas painting','canvas painting'),
+    ('canvas_painting','canvas_painting'),
     ('abstract','abstract'),
     ('coins', 'coins'),
-    ('rare item', 'rare item'),
-    ('paper craft', 'paper craft'),
-    ('wooden craft', 'wooden craft'),
+    ('rare_item', 'rare_item'),
+    ('paper_craft', 'paper_craft'),
+    ('wooden_craft', 'wooden_craft'),
     ('chair', 'chair'),
     ('chandelier', 'chandelier'),
     ('closet', 'closet'),

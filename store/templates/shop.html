@@ -44,10 +44,21 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select paintings
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="painting">
-                        <a class="dropdown-item" href="#">Sketches</a>
-                        <a class="dropdown-item" href="#">Canvas Paintings</a>
-                        <a class="dropdown-item" href="#">Abstract</a>
+                    <div class="dropdown-menu py-0 form-control" aria-labelledby="painting">
+                        <form method="get" class="form">
+                            <input type="text" name="art_category" value="sketch" hidden>
+                            <button class="btn btn-light form-control" type="submit">Sketches</button>
+                        </form>
+
+                        <form method="get" class="form">
+                            <input type="text" name="art_category" value="canvas_painting" hidden>
+                            <button class="btn btn-light form-control" type="submit">Canvas Paintings</button>
+                        </form>
+
+                        <form method="get" class="form">
+                            <input type="text" name="art_category" value="abstract" hidden>
+                            <button class="btn btn-light form-control" type="submit">Abstract</button>
+                        </form>
                     </div>
                 </div>
 
@@ -57,10 +68,11 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select antiques
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="antique">
-                        <a class="dropdown-item" href="#">Coins</a>
-                        <a class="dropdown-item" href="#">Canvas Paintings</a>
-                        <a class="dropdown-item" href="#">Abstract</a>
+                    <div class="dropdown-menu py-0 form-control" aria-labelledby="antique">
+                        <form method="get" class="form">
+                            <input type="text" name="art_category" value="coins" hidden>
+                            <button class="btn btn-light form-control" type="submit">Coins</button>
+                        </form>
                     </div>
                 </div>
 
@@ -70,9 +82,16 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select carft
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="craft">
-                        <a class="dropdown-item" href="#">Craft</a>
-                        <a class="dropdown-item" href="#">Wallpaper</a>
+                    <div class="dropdown-menu py-0 form-control" aria-labelledby="craft">
+                        <form method="get" class="form">
+                            <input type="text" name="art_category" value="craft" hidden>
+                            <button class="btn btn-light form-control" type="submit">Craft</button>
+                        </form>
+
+                        <form method="get" class="form">
+                            <input type="text" name="art_category" value="wallpaper" hidden>
+                            <button class="btn btn-light form-control" type="submit">Wallpaper</button>
+                        </form>
                     </div>
                 </div>
 
@@ -82,15 +101,27 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Select furniture
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="furniture">
-                        <a class="dropdown-item" href="#">Tables</a>
-                        <a class="dropdown-item" href="#">Chairs</a>
-                        <a class="dropdown-item" href="#">Chandelier</a>
-                        <a class="dropdown-item" href="#">Closet</a>
+                    <div class="dropdown-menu py-0 form-control" aria-labelledby="furniture">
+                        <form method="get" class="form">
+                            <input type="text" name="art_category" value="table" hidden>
+                            <button class="btn btn-light form-control" type="submit">Tables</button>
+                        </form>
+                        <form method="get" class="form">
+                            <input type="text" name="art_category" value="chair" hidden>
+                            <button class="btn btn-light form-control" type="submit">Chairs</button>
+                        </form>
+                        <form method="get" class="form">
+                            <input type="text" name="art_category" value="chandelier" hidden>
+                            <button class="btn btn-light form-control" type="submit">Chandelier</button>
+                        </form>
+                        <form method="get" class="form">
+                            <input type="text" name="art_category" value="closet" hidden>
+                            <button class="btn btn-light form-control" type="submit">Closet</button>
+                        </form>
                     </div>
                 </div>
 
-                <a href="#" class="my-2 no-text-decoration text-secondary text-center cursor-pointer">
+                <a href="{% url 'shoppage' %}" class="my-2 no-text-decoration text-secondary text-center cursor-pointer">
                     Clear Filter
                 </a>
             </div>
