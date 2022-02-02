@@ -1,7 +1,11 @@
 from django.urls import path
-from .views import AdminDashboardHome, AdminDashboardBase
+from .views import AdminDashboardHome, AdminDashboardUser, AdminDashboardProduct, \
+                            AdminDashboardOrder, AdminDashboardSale
 
 urlpatterns = [
-    path('base', AdminDashboardBase.as_view(), name='admindashboardbasepage'),
-    path('', AdminDashboardHome.as_view(), name='admindashboardhomepage')
+    path('', AdminDashboardHome.as_view(), name='admindashboardhomepage'),
+    path('users', AdminDashboardUser.as_view(), name='admindashboarduserpage'),
+    path('products', AdminDashboardProduct.as_view(), name='admindashboardproductpage'),
+    path('orders', AdminDashboardOrder.as_view(), name='admindashboardorderpage'),
+    path('sales', AdminDashboardSale.as_view(), name='admindashboardsalepage'),
 ]

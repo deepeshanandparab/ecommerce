@@ -76,7 +76,7 @@ img.wooden-frame:hover {
 }
 
 .cursor-pointer{
-	cursor: pointer;
+	cursor: pointer!important;
 }
 
 .no-text-decoration{
@@ -348,4 +348,15 @@ img.wooden-frame:hover {
 .checkout-cart-price{
   width: 70px;
   text-align: center;
+}
+
+.user-icon-text{
+  border: 1px solid;
+  background: #cfcfcf;
+  padding: 10px 15px;
+  border-radius: 50%;
+}
+
+td{
+  vertical-align: middle!important;
 }

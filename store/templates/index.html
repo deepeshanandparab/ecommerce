@@ -31,7 +31,7 @@
 <div class="row mx-auto container">
     <h4 class="font-bold my-4">Popular Products</h4>
     <div class="row">
-        {% for product in products_list|slice:'0:10' %}
+        {% for product in products_list|slice:'0:8' %}
         <div class="card mb-3 mx-auto" style="width: 23%;" id="product_{{product.id}}">
             <a href="{% url 'productpage' product.id %}">
             <img class="card-img-top cursor-pointer" height="200rem"
