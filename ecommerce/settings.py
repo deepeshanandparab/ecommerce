@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'store',
     'account',
+    'admin_dashboard',
     'mathfilters',
     'django_filters',
 ]
