@@ -4,84 +4,89 @@
 
 {% block content %}
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">New Registered Users</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Admin Dashboard</a></li>
-              <li class="breadcrumb-item active">Users</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 inline">New Registered Users</h1>
+          <small class="inline font-bold ml-2"><a href="{% url 'admindashboardalluserpage' %}">View All</a></small>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Admin Dashboard</a></li>
+            <li class="breadcrumb-item active">Users</li>
+          </ol>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
 
-        {% for monthly_users in users_list %}
-        <div class="card card-dark">
-            <div class="card-header" data-card-widget="collapse" aria-expanded="true">
-            {% now "F" as current_month %}
-            {% now "n" as numerical_current_month %} 
-            {% now "Y" as current_year %}
+      {% for monthly_users in users_list %}
+      {% if monthly_users|length > 0 %}
+      <div class="card card-dark">
+        <div class="card-header" data-card-widget="collapse" aria-expanded="true">
+          {% now "F" as current_month %}
+          {% now "n" as numerical_current_month|add:1 %}
+          {% now "Y" as current_year %}
 
-              <h3 class="card-title">{{monthly_users.0.date_joined|date:'F'}}
-                                     {{monthly_users.0.date_joined|date:'Y'}} 
-                                     ({{monthly_users|length}})</h3>
+          <h3 class="card-title">{{monthly_users.0.date_joined|date:'F'}}
+            {{monthly_users.0.date_joined|date:'Y'}}
+            ({{monthly_users|length}})</h3>
 
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
-                </button>
-              </div>
-              <!-- /.card-tools -->
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body" style="display: none;">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Contact</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in monthly_users %}
-                        <tr>
-                            <td scope="row">{{forloop.counter}}</td>
-                            <td>
-                                {% if user.profile.profile_image %}
-                                    <img class="direct-chat-img" src="{{user.profile.profile_image.url}}">
-                                {% else %}
-                                    <span class="user-icon-text text-dark text-uppercase">
-                                        {{user.username|make_list|first}}
-                                    </span>
-                                {% endif %}
-                            </td>
-                            <td>{{user.first_name}} {{user.last_name}}</td>
-                            <td>{{user.username}}</td>
-                            <td>{{user.email}}</td>
-                            <td>{{user.contact}}</td>
-                            <td><a href="#">View Profile</a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <!-- /.card-body -->
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
+            </button>
           </div>
-          {% endfor %}
-    </section>
+          <!-- /.card-tools -->
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body" style="display: none;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Last Login</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in monthly_users %}
+              <tr>
+                <td scope="row">{{forloop.counter}}</td>
+                <td>
+                  {% if user.profile.profile_image %}
+                  <img class="direct-chat-img" src="{{user.profile.profile_image.url}}">
+                  {% else %}
+                  <span class="user-icon-text text-dark text-uppercase">
+                    {{user.username|make_list|first}}
+                  </span>
+                  {% endif %}
+                </td>
+                <td>{{user.first_name}} {{user.last_name}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.contact}}</td>
+                <td>{{user.last_login|date:'d/m/Y'}}</td>
+                <td><a href="#" class="fa fa-eye" title="View Profile"></a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      {% endif %}
+      {% endfor %}
+  </section>
 </div>
 {% endblock%}

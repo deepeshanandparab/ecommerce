@@ -85,6 +85,7 @@ img.wooden-frame:hover {
 
 .no-artwork-section{
 	height: 400px;
+  text-align: center;
 }
 
 .no-artwork-section h4{
@@ -360,3 +361,24 @@ img.wooden-frame:hover {
 td{
   vertical-align: middle!important;
 }
+
+.inline{
+  display: inline!important;
+}
+
+.w-200{
+  width: 200%!important;
+}
+
+#users-search-filter .search-button{
+  border-radius: 0px!important;
+  border-top: 1px solid #ced4da;
+  border-bottom: 1px solid #ced4da;
+}
+
+#users-search-filter .close-button{
+  border-top: 1px solid #ced4da;
+  border-bottom: 1px solid #ced4da;
+  border-right: 1px solid #ced4da;
+}
+

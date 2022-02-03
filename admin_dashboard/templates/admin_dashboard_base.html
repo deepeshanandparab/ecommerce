@@ -56,6 +56,7 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
+      {% if page_title == 'Admin Dashboard Home' %}
       <li class="nav-item">
         <a class="nav-link" data-widget="navbar-search" href="#" role="button">
           <i class="fas fa-search"></i>
@@ -76,6 +77,7 @@
           </form>
         </div>
       </li>
+      {% endif %}
 
       
       <!-- Notifications Dropdown Menu -->
@@ -138,33 +140,33 @@
         <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
         <li class="nav-item menu-open">
-          <ul class="nav nav-treeview">
+          <ul class="nav nav-treeview" id="adminDashboardList">
             <li class="nav-item">
-              <a href="{% url 'admindashboardhomepage' %}" class="nav-link active">
+              <a href="{% url 'admindashboardhomepage' %}" class="nav-link w-200">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>Dashboard</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{% url 'admindashboarduserpage' %}" class="nav-link">
+              <a href="{% url 'admindashboarduserpage' %}" class="nav-link w-200">
                 <i class="nav-icon fas fa-user"></i>
                 <p>Users</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{% url 'admindashboardproductpage' %}" class="nav-link">
+              <a href="{% url 'admindashboardproductpage' %}" class="nav-link w-200">
                 <i class="nav-icon fas fa-shopping-basket"></i>
                 <p>Products</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{% url 'admindashboardorderpage' %}" class="nav-link">
+              <a href="{% url 'admindashboardorderpage' %}" class="nav-link w-200">
                 <i class="nav-icon fas fa-shopping-bag"></i>
                 <p>Orders</p>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{% url 'admindashboardsalepage' %}" class="nav-link">
+              <a href="{% url 'admindashboardsalepage' %}" class="nav-link w-200">
                 <i class="nav-icon fas fa-bars"></i>
                 <p>Sales</p>
               </a>
@@ -233,5 +235,7 @@
 <script src="{% static 'admin_dashboard/js/demo.js' %}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{% static 'admin_dashboard/js/pages/dashboard.js' %}"></script>
+
+<script src="{% static 'admin_dashboard/js/custom.js' %}"></script>
 </body>
 </html>

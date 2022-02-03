@@ -1,0 +1,187 @@
+{% extends 'admin_dashboard_base.html' %}
+{% load static %}
+{% load mathfilters %}
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Admin Dashboard</a></li>
+                        <li class="breadcrumb-item active">Users</li>
+                        <li class="breadcrumb-item active">All Users</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-5">
+                    {% if search_keyword != None %}
+                    <h1 class="m-0 inline">{{search_keyword|title}}</h1>
+                    <a class="text-secondary ml-2 font-sm" href="{% url 'admindashboardalluserpage' %}">Clear Search</a>
+                    {% else %}
+                    <h1 class="m-0 inline">All Users</h1>
+                    {% endif %}
+                </div>
+                <div class="col-sm-7">
+                    <div class="float-sm-right">
+                        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                            <i class="fas fa-search"></i>
+                        </a>
+                        
+                        <div class="navbar-search-block">
+                            <form class="form-inline" method="get" id="users-search-filter">
+                                <div class="input-group input-group-sm">
+                                  <input class="form-control form-control-navbar"
+                                  name="name" type="text" placeholder="Search" aria-label="Search">
+                                  <div class="input-group-append">
+                                    <button class="btn btn-navbar search-button bg-primary" type="submit">
+                                      <i class="fas fa-search"></i>
+                                    </button>
+                                    <a class="btn btn-navbar bg-primary close-button" type="button" data-widget="navbar-search">
+                                      <i class="fas fa-times"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Registered On</th>
+                        <th>Last Login</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if users_list|length > 0 %}
+                    {% for user in users_list %}
+                        <tr>
+                            <td>
+                                {% if user.profile.profile_image %}
+                                <img class="direct-chat-img" src="{{user.profile.profile_image.url}}">
+                                {% else %}
+                                <span class="user-icon-text text-dark text-uppercase">
+                                    {{user.username|make_list|first}}
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td>{{user.first_name}} {{user.last_name}}</td>
+                            <td>{{user.username}}</td>
+                            <td>{{user.email}}</td>
+                            <td>{{user.date_joined|date:'d/m/Y'}}</td>
+                            <td>{{user.last_login|date:'d/m/Y G:i A'}}</td>
+                            <td><a href="#" class="fa fa-eye" title="View Profile"></a></td>
+                        </tr>
+                    {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="no-artwork-section">
+                                <h4>No user found with name <b>{{search_keyword}}</b></h4>
+                            </td>
+                        </tr>
+                    {% endif%}
+                </tbody>
+            </table>
+        </div>
+
+        <!---------------------------------------- Pagination Section Start ------------------------------------------->
+        <div class="row mx-auto mb-3">
+            <div class="col-md-6">
+                <b>{% if users_list.count > 0 %}Showing products{% endif %}
+                    {% if users_list.paginator.count > 0 %}
+                    <small class="font-bold">
+                        ({{ first_item_number }}
+                        -
+                        {% if page_size|mul:users_list.number > users_list.paginator.count %}
+                        {{ users_list.paginator.count }}
+                        {% else %}
+                        {{ page_size|mul:users_list.number }}
+                        {% endif %}
+                        of
+                        {{ users_list.paginator.count }})
+                    </small>
+                    {% endif %}
+                </b>
+            </div>
+
+            <div class="col-md-6">
+                <nav class="float-right">
+                    {% if users_list.paginator.count > page_size and users_list.paginator.count > 0 %}
+                    <!---------------- Pagination Start ----------------------->
+                    <ul class="pagination pagination-sm">
+                        {% if users_list.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link text-dark"
+                                href="?page=1{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}">
+                                <i class="fa fa-angle-double-left font-bold"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link text-dark"
+                                href="?page={{ users_list.previous_page_number }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}"
+                                tabindex="-1">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <!-------------------------- Page Number Start --------------------------->
+                        {% for page in users_list.paginator.page_range %}
+                        {% if page == users_list.number %}
+                        <li class="page-item disabled">
+                            <a class="page-link text-dark bg-custom font-bold" href="#">
+                                {{ page }}
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link text-dark"
+                                href="?page={{ page }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}">
+                                {{ page }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        <!-------------------------- Page Number End ------------------------------>
+
+                        {% if users_list.has_next %}
+                        <li class="page-item">
+                            <a class="page-link text-dark"
+                                href="?page={{ users_list.next_page_number }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link text-dark"
+                                href="?page={{ users_list.paginator.num_pages }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}">
+                                <i class="fa fa-angle-double-right font-bold"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    {% endif %}
+                    <!---------------- Pagination End ----------------------->
+                </nav>
+            </div>
+        </div>
+        <!---------------------------------------- Pagination Section End ------------------------------------------->
+
+    </section>
+</div>
+{% endblock%}
