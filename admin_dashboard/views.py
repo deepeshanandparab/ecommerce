@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from store.models import User
+from store.models import User, Order
 from django.db.models import Count
 import datetime
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -86,6 +86,24 @@ class AdminDashboardAllUser(View):
                     'search_keyword': keyword,
                 }
         return render(request, 'admin_dashboard_all_user.html', context)
+
+
+class AdminDashboardUserProfile(View):
+
+    def post(self, request):
+        pass
+
+
+    def get(self, request, id):
+         user = User.objects.get(id=id)
+         pending_order_list = Order.objects.filter(user_id=id, status='pending')
+         complete_order_list = Order.objects.filter(user_id=id, status='complete')
+         context = {
+                    'user':user, 
+                    'pending_order_list': pending_order_list,
+                    'complete_order_list': complete_order_list,
+                    }
+         return render(request, 'admin_dashboard_user_profile.html', context)
 
 
 class AdminDashboardProduct(View):

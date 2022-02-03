@@ -1,0 +1,253 @@
+{% extends 'admin_dashboard_base.html' %}
+{% load static %}
+{% load custom_filter %}
+{% load cart %}
+{% load mathfilters %}
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Admin Dashboard</a></li>
+                        <li class="breadcrumb-item active">Users</li>
+                        <li class="breadcrumb-item active">User's Profile</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-4">
+                    <div class="card card-widget widget-user shadow">
+                        <!-- Add the bg color to the header using any of the bg-* classes -->
+                        <div class="widget-user-header bg-dark">
+                            <h3 class="widget-user-username">{{user.first_name}} {{user.last_name}}</h3>
+                            <h5 class="widget-user-desc">{{user.username}}</h5>
+                        </div>
+                        <div class="widget-user-image">
+                            {% if user.profile.profile_image %}
+                            <img class="img-circle elevation-2" src="{{user.profile.profile_image.url}}">
+                            {% else %}
+                            <img class="img-circle elevation-2" src="{% static 'admin_dashboard/img/default_profile_icon.jpg' %}">
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-sm-4 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header text-sm">{{user.date_joined|date:"d M,Y"}}</h5>
+                                        <span class="description-text text-sm">Joined On</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-4 border-right">
+                                    <div class="description-block">
+                                        <h5 class="description-header text-sm">Mumbai</h5>
+                                        <span class="description-text text-sm">Location</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-4">
+                                    <div class="description-block">
+                                        <h5 class="description-header text-sm">India</h5>
+                                        <span class="description-text text-sm">Country</span>
+                                    </div>
+                                    <!-- /.description-block -->
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                    </div>
+
+
+                    <div class="card-footer bg-white shadow">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="description-block text-left my-0">
+                                    <span class="description-text text-sm">Contact:</span>
+                                    <h5 class="description-header text-sm inline">{{user.profile.contact_number}}</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="description-block text-left my-0">
+                                    <span class="description-text text-sm">Email:</span>
+                                    <h5 class="description-header text-sm inline">{{user.email}}</h5>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <span class="description-text text-sm">{{user.profile.user_bio}}</span>
+                            </div>
+                            <div class="col-sm-12">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-8">
+                    <div class="card card-dark">
+                        <div class="card-header" data-card-widget="collapse" aria-expanded="true">
+
+                            <h3 class="card-title text-warning">Orders Pending</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                        class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                            <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: block;">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Image</th>
+                                        <th>Product Name</th>
+                                        <th>Price</th>
+                                        <th class="text-center">Order Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if pending_order_list|length > 0 %}
+                                    {% for order in pending_order_list %}
+                                    <tr class="text-sm">
+                                        <td scope="row">{{forloop.counter}}</td>
+                                        <td><img src="{{order.product.product.all.0.image.url}}" class="cart-image">
+                                        </td>
+                                        <td>{{order.product.name}}</td>
+                                        <td>{{order.product.price|inrcurrency|currency}}</td>
+                                        <td class="text-center">{{order.status}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr class="text-sm text-center">
+                                        <td colspan="5">
+                                            <h5 class="mt-4">No pending orders found</h5>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="card card-dark">
+                        <div class="card-header" data-card-widget="collapse" aria-expanded="true">
+
+                            <h3 class="card-title text-success">Orders Complete</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                        class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: none;">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Image</th>
+                                        <th>Product Name</th>
+                                        <th>Price</th>
+                                        <th class="text-center">Order Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if complete_order_list|length > 0 %}
+                                    {% for order in complete_order_list %}
+                                    <tr class="text-sm">
+                                        <td scope="row">{{forloop.counter}}</td>
+                                        <td><img src="{{order.product.product.all.0.image.url}}" class="cart-image">
+                                        </td>
+                                        <td>{{order.product.name}}</td>
+                                        <td>{{order.product.price|inrcurrency|currency}}</td>
+                                        <td class="text-center">{{order.status}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr class="text-sm text-center">
+                                        <td colspan="5">
+                                            <h5 class="mt-4">No completed orders found</h5>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <div class="card card-dark">
+                        <div class="card-header" data-card-widget="collapse" aria-expanded="true">
+
+                            <h3 class="card-title text-danger">Orders Cancelled</h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                        class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <!-- /.card-tools -->
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body" style="display: none;">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Image</th>
+                                        <th>Product Name</th>
+                                        <th>Price</th>
+                                        <th class="text-center">Order Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if complete_order_list|length > 0 %}
+                                    {% for order in complete_order_list %}
+                                    <tr class="text-sm">
+                                        <td scope="row">{{forloop.counter}}</td>
+                                        <td><img src="{{order.product.product.all.0.image.url}}" class="cart-image">
+                                        </td>
+                                        <td>{{order.product.name}}</td>
+                                        <td>{{order.product.price|inrcurrency|currency}}</td>
+                                        <td class="text-center">{{order.status}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr class="text-sm text-center">
+                                        <td colspan="5">
+                                            <h5 class="mt-4">No cancelled orders found</h5>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</section>
+</div>
+
+{% endblock %}

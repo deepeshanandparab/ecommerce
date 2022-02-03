@@ -87,7 +87,9 @@
                             <td>{{user.email}}</td>
                             <td>{{user.date_joined|date:'d/m/Y'}}</td>
                             <td>{{user.last_login|date:'d/m/Y G:i A'}}</td>
-                            <td><a href="#" class="fa fa-eye" title="View Profile"></a></td>
+                            <td>
+                                <a href="{% url 'admindashboarduserprofilepage' user.id %}" class="fa fa-eye" title="View Profile"></a>
+                            </td>
                         </tr>
                     {% endfor %}
                     {% else %}
