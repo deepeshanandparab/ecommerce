@@ -79,6 +79,10 @@ img.wooden-frame:hover {
 	cursor: pointer!important;
 }
 
+.cursor-not-allowed{
+  cursor: not-allowed!important;
+}
+
 .no-text-decoration{
 	text-decoration: none!important;
 }

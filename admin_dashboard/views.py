@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.views import View
-from store.models import User, Order
+from store.models import Product, User, Order
 from django.db.models import Count
 import datetime
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
+from .supporting_functions import generate_product_sku, get_sale_count, get_previous_month
+
 
 # Create your views here.
 class AdminDashboardHome(View):
@@ -14,7 +16,20 @@ class AdminDashboardHome(View):
 
 
     def get(self, request):
-        context = {'page_title': 'Admin Dashboard Home'}
+        today = datetime.date.today()
+        month = today.month
+        top_selling_products_list = Product.objects.filter(sold_quantity__gt=0).order_by('-sold_quantity')[:5]
+        orders_list = Order.objects.filter(date__month=month).order_by('-date')
+        products_list = Product.objects.filter(discount__gte=10).order_by('-discount')
+        users_list = User.objects.filter(date_joined__month=month)
+
+        context = {'page_title': 'Admin Dashboard Home',
+                    'top_selling_products_list': top_selling_products_list,
+                    'orders_list':orders_list,
+                    'products_list':products_list,
+                    'users_list':users_list,
+                    'sales_count':get_sale_count(month),
+                    'previous_month': get_previous_month()}
         return render(request, 'admin_dashboard_home.html', context)
 
 
@@ -32,7 +47,6 @@ class AdminDashboardUser(View):
             monthly_list = User.objects.filter(date_joined__month=month,date_joined__year=today.year)
             users_list.append(monthly_list)
             month = month - 1
-            print('first loop month', month)
             if (month < 1):
                 month = 12
                 year = today.year - 1
@@ -40,7 +54,6 @@ class AdminDashboardUser(View):
                     monthly_list = User.objects.filter(date_joined__month=month,date_joined__year=year)
                     users_list.append(monthly_list)
                     month = month - 1
-                    print('second loop month', month)
                 break
 
 

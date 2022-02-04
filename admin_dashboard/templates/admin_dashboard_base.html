@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>Admin | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -46,10 +46,10 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <a href="{% url 'homepage' %}" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Store</a>
+        <a href="{% url 'shoppage' %}" class="nav-link">Store</a>
       </li>
     </ul>
 
@@ -107,9 +107,11 @@
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
+      {% if user.is_authenticated %}
       <li class="nav-item">
-        <a class="nav-link" href="#" role="button">Logout</a>
+        <a class="nav-link" href="{% url 'logoutpage' %}" role="button">Logout</a>
       </li>
+      {% endif %}
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -117,7 +119,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="{% url 'admindashboardhomepage' %}" class="brand-link">
       <img src="{% static 'admin_dashboard/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Admin Dashboard</span>
     </a>
@@ -130,7 +132,7 @@
           <img src="{% static 'admin_dashboard/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Deepesh Parab</a>
+          <a href="#" class="d-block">{{request.user.username|title}}</a>
         </div>
       </div>
 

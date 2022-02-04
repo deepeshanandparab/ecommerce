@@ -61,7 +61,10 @@ def login(request):
         if user is not None:
             request.session['username'] = request.POST['username']
             auth.login(request, user)
-            return redirect('homepage')
+            if user.is_superuser:
+                return redirect('admindashboardhomepage')
+            else:
+                return redirect('homepage')
         else:
             messages.error(request, 'Username or Password is incorrect!')
             return render(request, 'login.html', {'title':'Login'})

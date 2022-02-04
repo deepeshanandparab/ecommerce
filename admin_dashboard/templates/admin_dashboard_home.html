@@ -1,4 +1,7 @@
 {% extends 'admin_dashboard_base.html' %}
+{% load cart %}
+{% load custom_filter %}
+{% load mathfilters %}
 
 {% block content %}
 <!-- Content Wrapper. Contains page content -->
@@ -12,8 +15,8 @@
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item active">Dashboard v1</li>
+            <li class="breadcrumb-item"><a href="#">Admin Dashboard</a></li>
+            <li class="breadcrumb-item active">Home</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -30,10 +33,10 @@
           <!-- small box -->
           <div class="small-box bg-info">
             <div class="inner">
-              <h3>150</h3>
+              <h3>{{orders_list|length}}</h3>
 
               <p class="mb-0">New Orders</p>
-              <small>January, 2022</small>
+              <small>{% now "F" %}, {% now "Y" %}</small>
             </div>
             <div class="icon">
               <i class="ion ion-bag"></i>
@@ -46,10 +49,12 @@
           <!-- small box -->
           <div class="small-box bg-success">
             <div class="inner">
-              <h3>53<sup style="font-size: 20px">%</sup></h3>
+              <h3>{{sales_count}}<sup style="font-size: 20px">%</sup></h3>
 
               <p class="mb-0">Sales Rate</p>
-              <small>Dec 2021 to Jan 2022</small>
+              <small>
+                {{previous_month}} to {% now "F" %}, {% now "Y" %}
+              </small>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -62,9 +67,10 @@
           <!-- small box -->
           <div class="small-box bg-warning" style="color: white!important;">
             <div class="inner">
-              <h3>44</h3>
+              <h3>{{users_list|length}}</h3>
 
-              <p>User Registrations</p>
+              <p class="mb-0">User Registrations</p>
+              <small>{% now "F" %}, {% now "Y" %}</small>
             </div>
             <div class="icon">
               <i class="ion ion-person-add"></i>
@@ -79,7 +85,7 @@
           <!-- small box -->
           <div class="small-box bg-danger">
             <div class="inner">
-              <h3>65</h3>
+              <h3>{{context_nb_vistors}}</h3>
 
               <p>Unique Visitors</p>
             </div>
@@ -119,7 +125,7 @@
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">
-                Top Selling Products (January, 2022)
+                Top Selling Products
               </h3>
             </div>
 
@@ -135,41 +141,21 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td scope="row">1</td>
-                    <td><img src=""></td>
-                    <td>Product ABC</td>
-                    <td class="text-center">11</td>
-                    <td class="text-center">10</td>
+                  {% if top_selling_products_list|length > 0 %}
+                  {% for product in top_selling_products_list %}
+                  <tr class="text-sm">
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td><img src="{{product.product.all.0.image.url}}" class="cart-image"></td>
+                    <td>{{product.name}}</td>
+                    <td class="text-center">{{product.sold_quantity}}</td>
+                    <td class="text-center">{{product.stock_quantity}}</td>
                   </tr>
-                  <tr>
-                    <td scope="row">1</td>
-                    <td><img src=""></td>
-                    <td>Product ABC</td>
-                    <td class="text-center">11</td>
-                    <td class="text-center">10</td>
+                  {% endfor %}
+                  {% else %}
+                  <tr class="text-center text-sm">
+                    <td class="no-artwork-section">No products found</td>
                   </tr>
-                  <tr>
-                    <td scope="row">1</td>
-                    <td><img src=""></td>
-                    <td>Product ABC</td>
-                    <td class="text-center">11</td>
-                    <td class="text-center">10</td>
-                  </tr>
-                  <tr>
-                    <td scope="row">1</td>
-                    <td><img src=""></td>
-                    <td>Product ABC</td>
-                    <td class="text-center">11</td>
-                    <td class="text-center">10</td>
-                  </tr>
-                  <tr>
-                    <td scope="row">1</td>
-                    <td><img src=""></td>
-                    <td>Product ABC</td>
-                    <td class="text-center">11</td>
-                    <td class="text-center">10</td>
-                  </tr>
+                  {% endif %}
                 </tbody>
               </table>
             </div>
@@ -201,75 +187,37 @@
                       <th>Order ID</th>
                       <th>Item</th>
                       <th>Status</th>
-                      <th>Popularity</th>
+                      <th>Date</th>
+                      <th>Order By</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html">OR9842</a></td>
-                      <td>Call of Duty IV</td>
-                      <td><span class="badge badge-success">Shipped</span></td>
+                    {% if orders_list|length > 0 %}
+                    {% for order in orders_list %}
+                    <tr class="text-sm">
+                      <td><a href="#">{{order.id}}</a></td>
+                      <td>{{order.product.name|title}}</td>
                       <td>
-                        <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
-                      </td>
+                        <span class="badge {% if order.status == 'complete' %} badge-success {% else %} badge-warning {% endif %}">
+                          {{order.status|title}}
+                        </span>
+                      <td>{{order.date|date:'d/m/Y'}}</td>
+                      <td>{{order.user.first_name}} {{order.user.last_name}}</td>
                     </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html">OR1848</a></td>
-                      <td>Samsung Smart TV</td>
-                      <td><span class="badge badge-warning">Pending</span></td>
-                      <td>
-                        <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-                      </td>
+                    {% endfor %}
+                    {% else %}
+                    <tr class="text-center text-sm">
+                      <td class="no-artwork-section" colspan="4">No orders found</td>
                     </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                      <td>iPhone 6 Plus</td>
-                      <td><span class="badge badge-danger">Delivered</span></td>
-                      <td>
-                        <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                      <td>Samsung Smart TV</td>
-                      <td><span class="badge badge-info">Processing</span></td>
-                      <td>
-                        <div class="sparkbar" data-color="#00c0ef" data-height="20">90,80,-90,70,-61,83,63</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html">OR1848</a></td>
-                      <td>Samsung Smart TV</td>
-                      <td><span class="badge badge-warning">Pending</span></td>
-                      <td>
-                        <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                      <td>iPhone 6 Plus</td>
-                      <td><span class="badge badge-danger">Delivered</span></td>
-                      <td>
-                        <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><a href="pages/examples/invoice.html">OR9842</a></td>
-                      <td>Call of Duty IV</td>
-                      <td><span class="badge badge-success">Shipped</span></td>
-                      <td>
-                        <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
-                      </td>
-                    </tr>
+                    {% endif %}
                   </tbody>
                 </table>
               </div>
               <!-- /.table-responsive -->
             </div>
             <!-- /.card-body -->
-            <div class="card-footer clearfix">
-              <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Place New Order</a>
-              <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All Orders</a>
+            <div class="card-footer text-center">
+              <a href="#" class="uppercase">View All Products</a>
             </div>
             <!-- /.card-footer -->
           </div>
@@ -285,69 +233,27 @@
                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
                   <i class="fas fa-minus"></i>
                 </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove">
-                  <i class="fas fa-times"></i>
-                </button>
               </div>
             </div>
             <!-- /.card-header -->
             <div class="card-body p-0">
               <ul class="products-list product-list-in-card pl-2 pr-2">
+                {% for product in products_list %}
                 <li class="item">
                   <div class="product-img">
-                    <img src="dist/img/default-150x150.png" alt="Product Image" class="img-size-50">
+                    <img src="{{product.product.all.0.image.url}}" alt="Product Image" class="img-size-50">
                   </div>
                   <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Samsung TV
-                      <span class="badge badge-warning float-right">$1800</span></a>
+                    <a href="#" class="product-title">
+                      <span class="text-dark">{{product.name}}</span> 
+                      <span class="text-success text-sm">{{product.discount}}% discount</span>
+                      <span class="badge badge-warning float-right">{{product.price|inrcurrency|currency}}</span></a>
                     <span class="product-description">
-                      Samsung 32" 1080p 60Hz LED Smart HDTV.
+                      {{product.description}}
                     </span>
                   </div>
                 </li>
-                <!-- /.item -->
-                <li class="item">
-                  <div class="product-img">
-                    <img src="dist/img/default-150x150.png" alt="Product Image" class="img-size-50">
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">Bicycle
-                      <span class="badge badge-info float-right">$700</span></a>
-                    <span class="product-description">
-                      26" Mongoose Dolomite Men's 7-speed, Navy Blue.
-                    </span>
-                  </div>
-                </li>
-                <!-- /.item -->
-                <li class="item">
-                  <div class="product-img">
-                    <img src="dist/img/default-150x150.png" alt="Product Image" class="img-size-50">
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">
-                      Xbox One <span class="badge badge-danger float-right">
-                      $350
-                    </span>
-                    </a>
-                    <span class="product-description">
-                      Xbox One Console Bundle with Halo Master Chief Collection.
-                    </span>
-                  </div>
-                </li>
-                <!-- /.item -->
-                <li class="item">
-                  <div class="product-img">
-                    <img src="dist/img/default-150x150.png" alt="Product Image" class="img-size-50">
-                  </div>
-                  <div class="product-info">
-                    <a href="javascript:void(0)" class="product-title">PlayStation 4
-                      <span class="badge badge-success float-right">$399</span></a>
-                    <span class="product-description">
-                      PlayStation 4 500GB Console (PS4)
-                    </span>
-                  </div>
-                </li>
-                <!-- /.item -->
+                {% endfor %}
               </ul>
             </div>
             <!-- /.card-body -->

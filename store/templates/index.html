@@ -43,11 +43,17 @@
                     <h6 class="card-title">{{product.name}}</h6>
                 </a>
                 {% if product.discount == 0 %}
-                    <p class="my-3">Price: {{product.price|inrcurrency|currency}}</p>
+                    <p class="my-3 inline">Price: {{product.price|inrcurrency|currency}}</p>
+                    {% if product.stock_quantity > 0 and product.stock_quantity <= 5 %}
+                            <small class="inline">(Only {{product.stock_quantity}} in stock)</small>
+                    {% endif %}
                 {% else %}
                     <p class="my-3">
-                        Price: <del>{{product.price|inrcurrency|currency}}</del>
-                        <small>{{product.price|discountedprice:product.discount|inrcurrency|currency}}</small>
+                        Price: <del class="inline">{{product.price|inrcurrency|currency}}</del>
+                        <small class="inline">{{product.price|discountedprice:product.discount|inrcurrency|currency}}</small>
+                        {% if product.stock_quantity > 0 and product.stock_quantity <= 5 %}
+                            <small class="inline">(Only {{product.stock_quantity}} in stock)</small>
+                        {% endif %}
                     </p>
                 {% endif %}
             </div>
@@ -105,14 +111,20 @@
                         </div>
                     </div>
                     {% else %}
-                    <div class="col-12 border-right">
-                        <form method="post" action="/?page={{page_number}}#product_{{product.id}}">
-                            {% csrf_token %}
-                            <input type="text" name="product" value="{{product.id}}" hidden> 
-                            <input type="submit" 
-                            class="float-right btn btn-light form-control no-border-radius" value="Add to Cart">
-                        </form>
-                    </div>
+                        {% if product.stock_quantity > 0 %}
+                        <div class="col-12">
+                            <form method="post" action="/?page={{page_number}}#product_{{product.id}}">
+                                {% csrf_token %}
+                                <input type="text" name="product" value="{{product.id}}" hidden> 
+                                <input type="submit" 
+                                class="float-right btn btn-light form-control no-border-radius" value="Add to Cart">
+                            </form>
+                        </div>
+                        {% else %}
+                        <div class="col-12">
+                            <p class="float-right btn btn-light form-control no-border-radius mb-0 cursor-not-allowed">Out of stock</p>
+                        </div>
+                        {% endif%}
                     {% endif %}
                 </div>
             </div>

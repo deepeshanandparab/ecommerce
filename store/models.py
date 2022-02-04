@@ -61,8 +61,11 @@ class Product(models.Model):
     sold_by = models.CharField(max_length=20)
     approved = models.BooleanField(default=False)
     wishlist = models.ManyToManyField(User, related_name='wishlist', blank=True)
+    sold_quantity = models.IntegerField(default=0)
+    stock_quantity = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    sku = models.CharField(max_length=20, default='')
 
 
     @staticmethod
@@ -154,3 +157,9 @@ class RatingReview(models.Model):
 
     def __str__(self):
         return f'{self.user} rated {self.product.name} with {self.rating} stars'
+
+
+class Visitor_Infos(models.Model):
+    ip_address = models.GenericIPAddressField()
+    page_visited = models.TextField()
+    event_date = models.DateTimeField(default=datetime.datetime.now)

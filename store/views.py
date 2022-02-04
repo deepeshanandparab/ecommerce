@@ -198,6 +198,7 @@ class CheckoutPage(LoginRequiredMixin, View):
         cart = request.session.get('cart')
         products = Product.get_products_by_id(list(cart.keys()))
         
+
         for product in products:
             order = Order(
                 product = product,
@@ -216,6 +217,12 @@ class CheckoutPage(LoginRequiredMixin, View):
                 alt_contact = alternate_contact,
                 terms = terms
             )
+            if product in products:
+                product = Product.objects.get(id=product.id)
+                product.sold_quantity = cart.get(str(product.id))
+                if product.stock_quantity > 0 and product.stock_quantity > product.sold_quantity:
+                    product.stock_quantity = product.stock_quantity - product.sold_quantity
+                product.save()
             order.save()
             request.session['cart'] = {}
         return redirect('orderspage')
