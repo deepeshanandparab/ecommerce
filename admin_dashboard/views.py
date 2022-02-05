@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render
 from django.views import View
 from store.models import Product, User, Order
@@ -126,7 +127,21 @@ class AdminDashboardProduct(View):
 
 
     def get(self, request):
-        return render(request, 'admin_dashboard_product.html')
+        id = request.GET.get('product_id')
+        product = []
+        if id != None:
+            product = Product.objects.get(id=id)
+        
+        products_type_list = []
+        art_type = ['painting','antique','craft','furniture']
+        i = 0
+        for type in art_type:
+            products_list = Product.objects.filter(art_type=type)
+            products_type_list.append(products_list)
+        
+        context = {'products_type_list': products_type_list,
+                    'product':product}
+        return render(request, 'admin_dashboard_product.html', context)
 
 
 class AdminDashboardOrder(View):

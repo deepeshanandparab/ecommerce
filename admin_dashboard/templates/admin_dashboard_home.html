@@ -75,7 +75,7 @@
             <div class="icon">
               <i class="ion ion-person-add"></i>
             </div>
-            <a href="#" class="small-box-footer" style="color: white!important;">
+            <a href="{% url 'admindashboarduserpage' %}" class="small-box-footer" style="color: white!important;">
               More info <i class="fas fa-arrow-circle-right"></i>
             </a>
           </div>
@@ -87,7 +87,8 @@
             <div class="inner">
               <h3>{{context_nb_vistors}}</h3>
 
-              <p>Unique Visitors</p>
+              <p class="mb-0">Active Visitors</p>
+              <small>{{unique_visitors}} Unique visitors</small>
             </div>
             <div class="icon">
               <i class="ion ion-pie-graph"></i>

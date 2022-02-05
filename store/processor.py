@@ -44,5 +44,6 @@ def save_visitor_infos(request):
     context_nb_vistors = 0
     ref_date = present_date - datetime.timedelta(minutes=5) 
     context_nb_vistors = Visitor_Infos.objects.filter(event_date__gte=ref_date).values_list('ip_address', flat=True).distinct().count()
+    unique_visitors = Visitor_Infos.objects.all().values_list('ip_address').distinct().count()
 
-    return {"context_nb_vistors":context_nb_vistors}
+    return {"context_nb_vistors":context_nb_vistors, "unique_visitors":unique_visitors}
