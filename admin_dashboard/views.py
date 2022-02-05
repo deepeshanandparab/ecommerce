@@ -1,11 +1,12 @@
 import re
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views import View
-from store.models import Product, User, Order
+from store.models import Product, User, Order, ImageAlbum
 from django.db.models import Count
 import datetime
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
+from django.contrib import messages
 from .supporting_functions import generate_product_sku, get_sale_count, get_previous_month
 
 
@@ -123,14 +124,48 @@ class AdminDashboardUserProfile(View):
 class AdminDashboardProduct(View):
 
     def post(self, request):
-        pass
+        name = request.POST.get('product_name')
+        description = request.POST.get('product_description')
+        price = request.POST.get('product_price')
+        art_type = request.POST.get('product_art_type')
+        artist = request.POST.get('product_artist')
+        user = User.objects.get(username=artist)
+        sold_by = request.POST.get('product_sold_by')
+        discount = request.POST.get('product_discount')
+        art_category = request.POST.get('product_art_category')
+        original_by = request.POST.get('product_original_by')
+        stock = request.POST.get('product_stock')
+        product_image = request.POST.get('product_image')
+        print('product_image', product_image)
+
+        product = Product(
+            name = name,
+            description = description,
+            price = price,
+            art_type = art_type,
+            artist = user,
+            sold_by = sold_by,
+            discount = discount,
+            discounted_price = int(price) * (1 - int(discount)/100),
+            art_category = art_category,
+            original_art_by = original_by,
+            stock_quantity = stock,
+            approved = True,
+            sku = generate_product_sku(name, art_type, art_category)
+        )
+
+        product.save()
+        messages.success(request, 'New Product Added Successfully')
+        return redirect('admindashboardproductpage')
 
 
     def get(self, request):
-        id = request.GET.get('product_id')
+        id = request.GET.get('id')
         product = []
         if id != None:
             product = Product.objects.get(id=id)
+        
+        print('product',product)
         
         products_type_list = []
         art_type = ['painting','antique','craft','furniture']
@@ -139,8 +174,11 @@ class AdminDashboardProduct(View):
             products_list = Product.objects.filter(art_type=type)
             products_type_list.append(products_list)
         
+        users_list = User.objects.all()
+        
         context = {'products_type_list': products_type_list,
-                    'product':product}
+                    'product':product,
+                    'users_list': users_list}
         return render(request, 'admin_dashboard_product.html', context)
 
 

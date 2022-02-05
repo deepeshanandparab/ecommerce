@@ -7,6 +7,17 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
+            <div class="row mx-auto">
+                <div class="col-md-12 text-center no-padding-left-lg no-padding-right-lg">
+                    {% for message in messages %}
+                    <div class="text-center alert alert-{% if message.level == 40 %}danger{% else %}{{message.tags}}{% endif %}"
+                        role="alert" id="message-container">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0 inline">Products</h1>
@@ -82,7 +93,7 @@
                                         <td>{{product.stock_quantity}}</td>
                                         <td>
                                             <form method="get">
-                                                <input type="text" value="{{product.id}}" hidden>
+                                                <input type="text" value="{{product.id}}" name="id" hidden>
                                                 <button type="submit" class="btn bg-white no-border">
                                                     <a href="#" class="fa fa-edit" title="Update Product"
                                                         data-toggle="modal" data-target="#addProductModal">
@@ -109,29 +120,30 @@
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content border-0">
-                <div class="modal-header bg-dark">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        Add New Product
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class="text-white">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header bg-dark">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Add New Product
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="text-white">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="product_name">Product Name</label>
                                     <input type="text" class="form-control" id="product_name" name="product_name"
-                                    value="{{product}}">
+                                        value="{{product}}">
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="product_description">Product Description</label>
-                                    <textarea class="form-control" id="product_description" rows="3" 
-                                    ></textarea>
+                                    <textarea class="form-control" id="product_description" rows="3"
+                                        name="product_description"></textarea>
                                 </div>
                             </div>
 
@@ -140,10 +152,10 @@
                                     <label for="product_price">Product Price</label>
                                     <input type="text" class="form-control" id="product_price" name="product_price">
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="product_art_type">Art Type</label>
-                                    <select class="form-control" id="product_art_type">
+                                    <select class="form-control" id="product_art_type" name="product_art_type">
                                         <option value="painting">Painting</option>
                                         <option value="antique">Antique</option>
                                         <option class="craft">Craft</option>
@@ -152,7 +164,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="product_artist">Artist</label>
-                                    <input type="text" class="form-control" id="product_artist" name="product_artist">
+                                    <select class="form-control" id="product_artist" name="product_artist">
+                                        {% for user in users_list %}
+                                        <option value="{{user}}">{{user.first_name}} {{user.last_name}}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="product_sold_by">Sold By</label>
@@ -167,28 +183,35 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="product_art_category">Art Category</label>
-                                    <select class="form-control" id="product_art_category">
-                                        <option>Painting</option>
-                                        <option>Antique</option>
-                                        <option>Craft</option>
-                                        <option>Furniture</option>
+                                    <select class="form-control" id="product_art_category" name="product_art_category">
+                                        <option value="sketch">Sketch</option>
+                                        <option value="canvas_painting">Canvas Painting</option>
+                                        <option value="abstract">Abstract</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="product_original_by">Original Art By</label>
-                                    <input type="text" class="form-control" id="product_original_by" name="product_original_by">
+                                    <input type="text" class="form-control" id="product_original_by"
+                                        name="product_original_by">
                                 </div>
                                 <div class="form-group">
                                     <label for="product_stock">Stock Available</label>
                                     <input type="number" class="form-control" id="product_stock" name="product_stock">
                                 </div>
                             </div>
+
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="product_image">Images</label>
+                                    <input type="file" class="form-control" name="product_image" multiple>
+                                </div>
+                            </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Add Product</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Add Product</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
