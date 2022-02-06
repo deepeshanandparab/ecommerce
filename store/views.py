@@ -9,6 +9,7 @@ from django.views import View
 from .forms import ReviewForm
 from django.contrib import messages
 from django.db.models import Sum
+from admin_dashboard.supporting_functions import generate_custom_string
 
 class IndexPage(View):
 
@@ -215,7 +216,8 @@ class CheckoutPage(LoginRequiredMixin, View):
                 delivery_method = del_method,
                 contact = contact,
                 alt_contact = alternate_contact,
-                terms = terms
+                terms = terms,
+                order_id = generate_custom_string(request.user.username, product.name, contact)
             )
             if product in products:
                 product = Product.objects.get(id=product.id)

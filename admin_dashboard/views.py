@@ -1,13 +1,13 @@
 import re
 from django.shortcuts import redirect, render
 from django.views import View
-from store.models import Product, User, Order, ImageAlbum
+from store.models import Product, ProductType, User, Order, ImageAlbum, ProductCategory
 from django.db.models import Count
 import datetime
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from django.contrib import messages
-from .supporting_functions import generate_product_sku, get_sale_count, get_previous_month
+from .supporting_functions import generate_custom_string, get_sale_count, get_previous_month, get_product_category
 
 
 # Create your views here.
@@ -136,7 +136,6 @@ class AdminDashboardProduct(View):
         original_by = request.POST.get('product_original_by')
         stock = request.POST.get('product_stock')
         product_image = request.POST.get('product_image')
-        print('product_image', product_image)
 
         product = Product(
             name = name,
@@ -151,7 +150,7 @@ class AdminDashboardProduct(View):
             original_art_by = original_by,
             stock_quantity = stock,
             approved = True,
-            sku = generate_product_sku(name, art_type, art_category)
+            sku = generate_custom_string(name, art_type, art_category)
         )
 
         product.save()
@@ -165,20 +164,22 @@ class AdminDashboardProduct(View):
         if id != None:
             product = Product.objects.get(id=id)
         
-        print('product',product)
-        
         products_type_list = []
-        art_type = ['painting','antique','craft','furniture']
-        i = 0
+        art_type = ProductType.objects.all()
+
         for type in art_type:
-            products_list = Product.objects.filter(art_type=type)
+            products_list = Product.objects.filter(art_type=type.value)
             products_type_list.append(products_list)
         
         users_list = User.objects.all()
+        product_type_list = ProductType.objects.all()
+        product_category_list = get_product_category(product_type_list)
         
         context = {'products_type_list': products_type_list,
                     'product':product,
-                    'users_list': users_list}
+                    'users_list': users_list,
+                    'product_category_list': product_category_list,
+                    'product_type_list':product_type_list}
         return render(request, 'admin_dashboard_product.html', context)
 
 
@@ -200,6 +201,31 @@ class AdminDashboardSale(View):
 
     def get(self, request):
         return render(request, 'admin_dashboard_sale.html')
+
+
+
+def AddNewProductType(request):
+    if request.method == 'POST':
+        type = request.POST.get('product_type')
+        value = request.POST.get('product_type_value')
+
+        product_type = ProductType(
+            type = type,
+            value = value
+        )
+        product_type.save()
+        messages.success(request, f'New Product Type - {type} Added Successfully')
+
+    return redirect('admindashboardproductpage')
+
+def DeleteProductType(request, id):
+    if request.method == 'POST':
+        product_type = ProductType.objects.get(id=id)
+        ProductType.objects.get(id=id).delete()
+        messages.success(request, f'Product Type - {product_type.type} Deleted Successfully')
+
+    return redirect('admindashboardproductpage')
+
 
 
 

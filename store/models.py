@@ -82,6 +82,26 @@ class Product(models.Model):
         return self.name
 
 
+class ProductType(models.Model):
+    type = models.CharField(max_length=15)
+    value = models.CharField(max_length=15, default='')
+
+
+    def __str__(self):
+        return self.type
+
+
+class ProductCategory(models.Model):
+    type = models.ForeignKey(ProductType, related_name='product_type', on_delete=models.CASCADE)
+    category = models.CharField(max_length=15)
+    value = models.CharField(max_length=15, default='')
+
+
+    def __str__(self):
+        return f'{self.category} in {self.type.type}' 
+
+
+
 class CanvasSize(models.Model):
     product = models.ForeignKey(Product, related_name='canvas_product', on_delete=models.CASCADE)
     canvas_size = models.CharField(max_length=50, choices=CANVAS_SIZE_CHOICES, default='')
@@ -113,6 +133,7 @@ class ImageAlbum(models.Model):
 
 class Order(models.Model):
     product = models.ForeignKey(Product, related_name='order_product', on_delete=models.CASCADE)
+    order_id = models.CharField(max_length=10, default='')
     user = models.ForeignKey(User, related_name='order_user', on_delete=models.CASCADE)
     quantity = models.IntegerField()
     price = models.IntegerField()

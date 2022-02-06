@@ -36,7 +36,7 @@
               <h3>{{orders_list|length}}</h3>
 
               <p class="mb-0">New Orders</p>
-              <small>{% now "F" %}, {% now "Y" %}</small>
+              <small>{% now "M" %}, {% now "Y" %}</small>
             </div>
             <div class="icon">
               <i class="ion ion-bag"></i>
@@ -53,7 +53,7 @@
 
               <p class="mb-0">Sales Rate</p>
               <small>
-                {{previous_month}} to {% now "F" %}, {% now "Y" %}
+                {{previous_month}} to {% now "M" %}, {% now "Y" %}
               </small>
             </div>
             <div class="icon">
@@ -70,7 +70,7 @@
               <h3>{{users_list|length}}</h3>
 
               <p class="mb-0">User Registrations</p>
-              <small>{% now "F" %}, {% now "Y" %}</small>
+              <small>{% now "M" %}, {% now "Y" %}</small>
             </div>
             <div class="icon">
               <i class="ion ion-person-add"></i>
@@ -85,13 +85,14 @@
           <!-- small box -->
           <div class="small-box bg-danger">
             <div class="inner">
-              <h3>{{context_nb_vistors}}</h3>
+              <h3 class="inline">{{context_nb_vistors}}</h3>
+              <sup class="fas fa-circle text-success" style="top:-20px"></sup>
 
-              <p class="mb-0">Active Visitors</p>
+              <p class="mb-0 mt-2">Active Visitors</p>
               <small>{{unique_visitors}} Unique visitors</small>
             </div>
             <div class="icon">
-              <i class="ion ion-pie-graph"></i>
+              <i class="ion ion-laptop"></i>
             </div>
             <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
@@ -196,7 +197,7 @@
                     {% if orders_list|length > 0 %}
                     {% for order in orders_list %}
                     <tr class="text-sm">
-                      <td><a href="#">{{order.id}}</a></td>
+                      <td><a href="#">{{order.order_id|upper}}</a></td>
                       <td>{{order.product.name|title}}</td>
                       <td>
                         <span class="badge {% if order.status == 'complete' %} badge-success {% else %} badge-warning {% endif %}">

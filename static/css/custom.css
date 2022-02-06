@@ -386,3 +386,16 @@ td{
   border-right: 1px solid #ced4da;
 }
 
+#dvPreview img{
+  margin-bottom: 10px;
+}
+
+.no-display{
+  display: none;
+}
+
+#productTypeContent {
+  width: 150%;
+  left: -15%;
+}
+

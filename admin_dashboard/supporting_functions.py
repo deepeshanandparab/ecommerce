@@ -1,29 +1,29 @@
-from store.models import Order
+from store.models import Order, ProductCategory
 import datetime
 
-def generate_product_sku(name, type, category):
+def generate_custom_string(param1, param2, param3):
     i = 0
     j = 0
     k = 0
-    sku = []
-    sku_number = ''
+    list = []
+    custom_string = ''
     
     while i<=2:
-        sku.append(str(name)[i])
+        list.append(str(param1)[i])
         i += 1
             
     while k<=2:
-        sku.append(str(type)[k])
+        list.append(str(param2)[k])
         k += 1
 
     while j<=2:
-        sku.append(str(category)[j])
+        list.append(str(param3)[j])
         j += 1
 
-    for n in sku: 
-        sku_number += n  
+    for n in list: 
+        custom_string += n  
 
-    return sku_number 
+    return custom_string.upper() 
 
 
 def get_sale_count(month):
@@ -39,4 +39,15 @@ def get_previous_month():
     today = datetime.date.today()
     first = today.replace(day=1)
     lastMonth = first - datetime.timedelta(days=1)
-    return lastMonth.strftime("%B, %Y")
+    return lastMonth.strftime("%b, %Y")
+
+
+def get_product_category(product_type_list):
+    products_category_list = []
+    i = 0
+    for type in product_type_list:
+        products_category = ProductCategory.objects.filter(type=type.id)
+        products_category_list.append(products_category)
+        print(products_category_list)
+    
+    return products_category_list
