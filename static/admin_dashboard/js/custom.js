@@ -90,13 +90,27 @@ function load_category() {
 };
 
 
+/* --------------Product Category Add, Update, Delete Functions-----------------*/
+function showProductCategoryForm(id){
+    console.log(id)
+    var add_category_form = document.getElementById(id);
+    console.log(add_category_form)
+    add_category_form.style.display = "block";
+};
+
+
+function hideProductCategoryForm(id){
+    var add_category_form = document.getElementById(id);
+    add_category_form.style.display = "none";
+};
+
+
 function showUpdateForm(id){
     var category_update_form = document.getElementById(id);
     category_update_form.style.display = "block";
 
     var str_category = 'category_data_';
     var category = str_category.concat(id);
-    console.log(category);
     var category_data_section = document.getElementById(category);
     category_data_section.style.display = "none";
 };
@@ -112,3 +126,33 @@ function hideUpdateForm(id){
     var category_data_section = document.getElementById(category);
     category_data_section.style.display = "block";
 };
+
+
+
+/* ----------------------------------------------------------------------- */
+function show_order_content(id) {
+    var value = document.getElementById(id).id;
+    console.log(id)
+    pending = document.getElementById("pendingorders");
+    complete = document.getElementById("completedorders");
+    cancelled = document.getElementById("cancelledorders");
+
+    if (value == "pendingorders") {
+        pending.style.display = "block";
+        complete.style.display = "none";
+        cancelled.style.display = "none";
+    } else if(value == "completedorders") {
+        pending.style.display = "none";
+        complete.style.display = "block";
+        cancelled.style.display = "none";
+    }
+    else if(value == "cancelledorders") {
+        pending.style.display = "none";
+        complete.style.display = "none";
+        cancelled.style.display = "block";
+    }
+    else{
+        pending.style.display = "block";
+        complete.style.display = "none";
+        cancelled.style.display = "none";
+    }

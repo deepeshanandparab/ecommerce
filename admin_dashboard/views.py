@@ -218,6 +218,44 @@ def AddNewProductType(request):
 
     return redirect('admindashboardproductpage')
 
+
+def AddNewProductCategory(request):
+    if request.method == 'POST':
+        product_type_id = request.POST.get('type_value')
+        type = ProductType.objects.get(id=product_type_id)
+        category = request.POST.get('type_category').title()
+        value = request.POST.get('type_category').lower()
+
+        product_category = ProductCategory(
+            type = type,
+            category = category,
+            value = value
+        )
+        product_category.save()
+        messages.success(request, f'New Category - {category} Added Successfully')
+    return redirect('admindashboardproductpage')
+
+
+def UpdateProductCategory(request, id):
+    if request.method == 'POST':
+        product_category = ProductCategory.objects.get(id=id)
+        category = request.POST.get('form_category').title()
+        value = request.POST.get('form_category_value').lower()
+        ProductCategory.objects.filter(id=id).update(category = category, value = value)
+        messages.success(request, f'Product Category - {product_category.category} Updated Successfully')
+
+    return redirect('admindashboardproductpage')
+
+
+def DeleteProductCategory(request, id):
+    if request.method == 'POST':
+        product_category = ProductCategory.objects.get(id=id)
+        ProductCategory.objects.get(id=id).delete()
+        messages.success(request, f'Product Category - {product_category.category} Deleted Successfully')
+
+    return redirect('admindashboardproductpage')
+
+
 def DeleteProductType(request, id):
     if request.method == 'POST':
         product_type = ProductType.objects.get(id=id)

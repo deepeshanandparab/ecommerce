@@ -1,5 +1,62 @@
 {% extends 'admin_dashboard_base.html' %}
+{% load static %}
 
 {% block content %}
-<h1>Admin Dashboard Orders</h1>
-{% endblock%}
+<div class="content-wrapper pb-2">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 inline">Orders</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Admin Dashboard</a></li>
+                        <li class="breadcrumb-item active">Orders</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active cursor-pointer" onclick="show_order_content(pendingorders)">
+                            Pending Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link cursor-pointer" onclick="show_order_content(completedorders)">
+                            Complete Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link cursor-pointer" onclick="show_order_content(cancelledorders)">
+                            Cancelled Orders
+                        </a>
+                    </li>
+                </ul>
+                    
+                
+                <div class="tab-pane fade show active" id="pendingorders">
+                    <h4>Pending Orders</h4>  
+                </div>
+                
+                <div class="tab-pane fade" id="completedorders">
+                    <h4>Completed Orders</h4>  
+                </div>
+                
+                <div class="tab-pane fade" id="cancelledorders">
+                    <h4>Cancelled Orders</h4>  
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

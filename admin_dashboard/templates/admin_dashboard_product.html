@@ -92,16 +92,132 @@
                                         <td>{{product.sold_quantity}}</td>
                                         <td>{{product.stock_quantity}}</td>
                                         <td>
-                                            <form method="get">
-                                                <input type="text" value="{{product.id}}" name="id" hidden>
-                                                <button type="submit" class="btn bg-white no-border">
-                                                    <a href="#" class="fa fa-edit" title="Update Product"
-                                                        data-toggle="modal" data-target="#addProductModal">
-                                                    </a>
-                                                </button>
-                                            </form>
+                                            <a href="#" class="fa fa-edit" title="Update Product"
+                                                data-toggle="modal" data-target="#updateProductModal{{product.id}}">
+                                            </a>
                                         </td>
                                     </tr>
+
+                                    <!--------------------------- Add New Product Modal ---------------------->
+                                    <div class="modal fade" id="updateProductModal{{product.id}}" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content border-0">
+                                            <form method="post" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <div class="modal-header bg-dark">
+                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                        Update Product
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true" class="text-white">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="product_name">Product Name</label>
+                                                                <input type="text" class="form-control" name="product_name"
+                                                                    value="{{product.name}}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="product_description">Product Description</label>
+                                                                <textarea class="form-control" rows="3" name="product_description">{{product.description}}</textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="product_price">Product Price</label>
+                                                                <input type="text" class="form-control" name="product_price" value="{{product.price}}">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="product_art_type">Art Type</label>
+                                                                <select class="form-control" id="product_art_type" name="product_art_type"
+                                                                    onclick="load_category()">
+                                                                    <option value="painting">Painting</option>
+                                                                    <option value="antique">Antique</option>
+                                                                    <option value="craft">Craft</option>
+                                                                    <option value="furniture">Furniture</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="product_artist">Artist</label>
+                                                                <select class="form-control" id="product_artist" name="product_artist">
+                                                                    {% for user in users_list %}
+                                                                    <option value="{{user}}">{{user.first_name}} {{user.last_name}}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="product_sold_by">Sold By</label>
+                                                                <input type="text" class="form-control" name="product_sold_by" value="{{product.sold_by}}">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label for="product_discount">Discount</label>
+                                                                <input type="text" class="form-control" name="product_discount" value="{{product.discount}}">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="product_art_category">Art Category</label>
+                                                                <select class="form-control" id="painting" name="product_art_category">
+                                                                    <option value="sketch" class="painting">Sketch</option>
+                                                                    <option value="canvas_painting">Canvas Painting</option>
+                                                                    <option value="abstract">Abstract</option>
+                                                                </select>
+                                                                <select class="form-control no-display" id="antique" name="product_art_category">
+                                                                    <option value="coins">Coins</option>
+                                                                    <option value="rare_item">Rare Item</option>
+                                                                </select>
+                                                                <select class="form-control no-display" id="craft" name="product_art_category">
+                                                                    <option value="paper_craft">Paper Craft</option>
+                                                                    <option value="wooden_craft">Wooden Craft</option>
+                                                                </select>
+                                                                <select class="form-control no-display" id="furniture" name="product_art_category">
+                                                                    <option value="chair">Chair</option>
+                                                                    <option value="chandelier">Chandelier</option>
+                                                                    <option value="closet">Closet</option>
+                                                                    <option value="table">Table</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="product_original_by">Original Art By</label>
+                                                                <input type="text" class="form-control" name="product_original_by"
+                                                                value="{{product.original_art_by}}">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="product_stock">Stock Available</label>
+                                                                <input type="number" class="form-control" name="product_stock"
+                                                                value="{{product.stock_quantity}}">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label for="product_image">Images</label>
+                                                                <input type="file" multiple="multiple"
+                                                                    class="form-control btn btn-dark pt-1 pb-4" name="product_image" />
+                                                                <div id="" class="mt-3">
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">Update Product</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-------------------------------------------------------------------->
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -109,6 +225,8 @@
                         <!-- /.card-body -->
                     </div>
                     {% endif %}
+
+                    
                     {% endfor %}
                 </div>
             </div>
@@ -155,7 +273,6 @@
                     </div>
 
                     <div class="row">
-
                         {% for product_type in product_category_list %}
                         <div class="col-6 mt-4">
                             {% if product_type|length > 0 %}
@@ -163,16 +280,66 @@
                                 <button type="button" class="btn btn-tool float-right pr-0">
                                     <i class="fas fa-minus-square fa-2x mt-1" title="Delete Type"></i>
                                 </button>
-                                <button type="button" class="btn btn-tool float-right pr-0">
+                                <button type="button" class="btn btn-tool float-right pr-0" onclick="showProductCategoryForm(type{{product_type.0.type.id}})">
                                     <i class="fas fa-plus-square fa-2x mt-1" title="Add New Category"></i>
                                 </button>
                             </h5>
+
+                            <div class="row mx-1 my-1" id="type{{product_type.0.type.id}}">
+                                <div class="col-12">
+                                    <form method="post" action="{% url 'addnewproductcategory' %}">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <input type="text" class="form-control form-control-sm"
+                                                    id="type_category" name="type_category" required>
+                                                <input type="text" class="form-control form-control-sm"
+                                                    id="type_value" name="type_value" value="{{product_type.0.type.id}}" hidden>
+                                            </div>
+                                            <div class="col-4">
+                                                <button type="submit" class="btn btn-primary btn-sm col-6">Add</button>
+                                                <a class="btn btn-dark btn-sm col-5"
+                                                    onclick="hideProductCategoryForm(type{{product_type.0.type.id}})">X</a>
+                                            </div>
+                                        </div>
+                                        <hr class="my-0 mt-2">
+                                    </form>
+                                </div>
+                            </div>
                             {% endif %}
+
                             {% for product_category in product_type %}
                             <div id="category_data_{{product_category.id}}">
                                 <p class="mb-1 ml-2 inline">{{product_category.category}}</p>
-                                <a class="text-sm fas fa-trash float-right cursor-pointer text-danger mr-2 mt-1">
+                                <a class="text-sm fas fa-trash float-right cursor-pointer text-danger mr-2 mt-1"
+                                data-toggle="modal" data-target="#deleteCategoryModal{{product_category.id}}">
                                 </a>
+
+                                <!---------------------- Delete Category Model --------------------------->
+                                <div class="modal" tabindex="-1" role="dialog" id="deleteCategoryModal{{product_category.id}}">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete Category - {{product_category.category}}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <p>Are Your Sure?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <form method="post" action="{% url 'deleteproductcategory' product_category.id %}">  
+                                          {% csrf_token %}  
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                          </form>
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                <!------------------------------------------------------------------------>
+                                
                                 <a class="text-sm fas fa-edit float-right cursor-pointer text-dark mr-2 mt-1"
                                     onclick="showUpdateForm({{product_category.id}})">
                                 </a>
@@ -180,7 +347,7 @@
 
                             <div class="row mx-1 no-display my-1" id="{{product_category.id}}">
                                 <div class="col-12">
-                                    <form method="post">
+                                    <form method="post" action="{% url 'updateproductcategory' product_category.id %}">
                                         {% csrf_token %}
                                         <div class="row">
                                             <div class="col-4">
@@ -244,6 +411,7 @@
 
 
 
+    <!--------------------------- Add New Product Modal ---------------------->
     <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -360,6 +528,7 @@
             </div>
         </div>
     </div>
+    <!-------------------------------------------------------------------->
 
 </div>
 {% endblock%}
