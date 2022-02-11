@@ -38,7 +38,8 @@ CANVAS_SIZE_CHOICES = (
 
 ORDER_STATUS_CHOICES = (
     ('pending','pending'),
-    ('complete','complete')
+    ('complete','complete'),
+    ('cancelled','cancelled')
 )
 
 
@@ -79,7 +80,12 @@ class Product(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return f'{self.name} {self.price}'
+
+
+class BuyingPrice(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    buying_price = models.IntegerField()
 
 
 class ProductType(models.Model):
@@ -154,6 +160,10 @@ class Order(models.Model):
     def __str__(self):
         return f'Order: {self.product.name}({self.quantity}) - {self.price} \
                         by {self.first_name} {self.last_name} {self.date}'
+
+
+    def __unicode__(self):
+        return u'%s %s' % (self.price, self.date)
 
 
 class Wishlist(models.Model):

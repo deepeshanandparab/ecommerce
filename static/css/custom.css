@@ -399,3 +399,11 @@ td{
   left: -15%;
 }
 
+.complete-order-btn:hover {
+  color: green;
+}
+
+.highlight{
+  background-color:#cafc99;
+}
+

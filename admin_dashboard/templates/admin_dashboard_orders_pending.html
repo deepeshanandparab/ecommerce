@@ -1,0 +1,210 @@
+{% extends 'admin_dashboard_base.html' %}
+{% load static %}
+{% load custom_filter %}
+{% load mathfilters %}
+
+{% block content %}
+<div class="content-wrapper pb-2">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 inline">Orders Pending</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Admin Dashboard</a></li>
+                        <li class="breadcrumb-item active">Orders Pending</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card-body">
+                    <div class="col-12 mb-3">
+                        <ul class="nav nav-pills nav-dark">
+                            <li class="nav-item">
+                                <form method="get">
+                                    <input type="text" name="today" value="clicked" hidden>
+                                    <button type="submit" class="nav-link active btn mr-2">Today</button>
+                                </form>
+                            </li>
+                            <li class="nav-item">
+                                <form method="get">
+                                    <input type="text" name="this_week" value="clicked" hidden>
+                                    <button type="submit" class="nav-link active btn mr-2">This Week</button>
+                                </form>
+                            </li>
+                            <li class="nav-item">
+                                <form method="get">
+                                    <input type="text" name="this_month" value="clicked" hidden>
+                                    <button type="submit" class="nav-link active btn mr-2">This Month</button>
+                                </form>
+                            </li>
+                          </ul>
+                    </div>    
+                
+                    <table class="table">
+                        <thead class="bg-dark">
+                            <tr>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Order From</th>
+                                <th>Email</th>
+                                <th>Contact</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if pending_order_list|length > 0 %}
+                            {% for order in pending_order_list %}
+                            <tr class="text-sm {% if order.delivery_method == 'express' %}highlight{% endif %}">
+                                <td><img src="{{order.product.product.all.0.image.url}}" class="cart-image">
+                                </td>
+                                <td>{{order.product.name}}</td>
+                                <td>{{order.product.price|inrcurrency|currency}}</td>
+                                <td>{{order.quantity}}</td>
+                                <td>{{order.first_name}} {{order.last_name}}</td>
+                                <td>{{order.email}}</td>
+                                <td>{{order.contact}}</td>
+                                <td>{{order.date|date:'d/m/Y'}}</td>
+                                <td>
+                                    <a class="btn complete-order-btn" title="Mark As Complete"
+                                    data-toggle="modal" data-target="#markAsComplete{{order.id}}">
+                                        <i class="fa fa-check-square" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+
+                                <!---------------------- Delete Category Model --------------------------->
+                                <div class="modal" tabindex="-1" role="dialog" id="markAsComplete{{order.id}}">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Mark as Complete</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <p>Are you sure about marking this order as complete?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <form method="post" action="{% url 'markordercomplete' order.id %}">  
+                                          {% csrf_token %}  
+                                            <button type="submit" class="btn btn-success">Mark Complete</button>
+                                          </form>
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                <!------------------------------------------------------------------------>
+
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr class="text-sm text-center">
+                                <td colspan="9">
+                                    <h5 class="mt-4">No pending orders found</h5>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!---------------------------------------- Pagination Section Start ------------------------------------------->
+            <div class="row mx-auto mb-3">
+                <div class="col-md-6">
+                    <b>{% if pending_order_list.count > 0 %}Showing products{% endif %}
+                        {% if pending_order_list.paginator.count > 0 %}
+                        <small class="font-bold">
+                            ({{ first_item_number }}
+                            -
+                            {% if page_size|mul:pending_order_list.number > pending_order_list.paginator.count %}
+                            {{ pending_order_list.paginator.count }}
+                            {% else %}
+                            {{ page_size|mul:pending_order_list.number }}
+                            {% endif %}
+                            of
+                            {{ pending_order_list.paginator.count }})
+                        </small>
+                        {% endif %}
+                    </b>
+                </div>
+
+                <div class="col-md-6">
+                    <nav class="float-right">
+                        {% if pending_order_list.paginator.count > page_size and pending_order_list.paginator.count > 0 %}
+                        <!---------------- Pagination Start ----------------------->
+                        <ul class="pagination pagination-sm">
+                            {% if pending_order_list.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link text-dark"
+                                    href="?page=1{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}">
+                                    <i class="fa fa-angle-double-left font-bold"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link text-dark"
+                                    href="?page={{ pending_order_list.previous_page_number }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}"
+                                    tabindex="-1">
+                                    <i class="fa fa-angle-left"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                            <!-------------------------- Page Number Start --------------------------->
+                            {% for page in pending_order_list.paginator.page_range %}
+                            {% if page == pending_order_list.number %}
+                            <li class="page-item disabled">
+                                <a class="page-link text-dark bg-custom font-bold" href="#">
+                                    {{ page }}
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item">
+                                <a class="page-link text-dark"
+                                    href="?page={{ page }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}">
+                                    {{ page }}</a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            <!-------------------------- Page Number End ------------------------------>
+
+                            {% if pending_order_list.has_next %}
+                            <li class="page-item">
+                                <a class="page-link text-dark"
+                                    href="?page={{ pending_order_list.next_page_number }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}">
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link text-dark"
+                                    href="?page={{ pending_order_list.paginator.num_pages }}{% if request.GET.title %}&title={{ request.GET.title }}{% endif %}">
+                                    <i class="fa fa-angle-double-right font-bold"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                        {% endif %}
+                        <!---------------- Pagination End ----------------------->
+                    </nav>
+                </div>
+            </div>
+            <!---------------------------------------- Pagination Section End ------------------------------------------->
+        </div>
+    </section>
+</div>
+{% endblock %}

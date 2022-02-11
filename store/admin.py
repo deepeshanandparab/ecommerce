@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Product, ImageAlbum, CanvasSize, Order, Wishlist, RatingReview, Visitor_Infos\
-                    , ProductType, ProductCategory
+                    , ProductType, ProductCategory, BuyingPrice
 
 
 # Register your models here.
@@ -13,3 +13,4 @@ admin.site.register(RatingReview)
 admin.site.register(Visitor_Infos)
 admin.site.register(ProductType)
 admin.site.register(ProductCategory)
+admin.site.register(BuyingPrice)

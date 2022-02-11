@@ -161,12 +161,32 @@
                 <p>Products</p>
               </a>
             </li>
+
             <li class="nav-item">
-              <a href="{% url 'admindashboardorderpage' %}" class="nav-link w-200">
+              <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-shopping-bag"></i>
                 <p>Orders</p>
+                <i class="fa fa-angle-down float-right" aria-hidden="true"></i>
               </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{% url 'admindashboardorderpendingpage' %}" class="nav-link pl-5">
+                    <p>Pending Orders</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'admindashboardordercompletepage' %}" class="nav-link pl-5">
+                    <p>Complete Orders</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'admindashboardordercancelpage' %}" class="nav-link pl-5">
+                    <p>Cancelled Orders</p>
+                  </a>
+                </li>
+              </ul>
             </li>
+              
             <li class="nav-item">
               <a href="{% url 'admindashboardsalepage' %}" class="nav-link w-200">
                 <i class="nav-icon fas fa-bars"></i>
@@ -240,5 +260,7 @@
 
 <script src="{% static 'admin_dashboard/js/custom.js' %}"></script>
 <script src="{% static 'js/custom.js' %}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 </body>
 </html>
